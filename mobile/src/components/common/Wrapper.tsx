@@ -1,13 +1,23 @@
-import {ReactNode } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import {FC, ReactNode } from 'react';
+import { View, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Wrapper = ({loading,children}:{loading:boolean | false,children:ReactNode}) => {
-  return (
-    <SafeAreaView>
-        {loading ? <ActivityIndicator/> : children}
-    </SafeAreaView>
-  )
+interface WrapperProps{
+  loading?:boolean
+  children:ReactNode
 }
+const Wrapper:FC<WrapperProps> = ({loading = false, children}) => {
+  return (
+    <SafeAreaView className="flex-1 bg-white dark:bg-dark">
+        {loading ? (
+          <View className="items-center justify-center flex-1">
+            <ActivityIndicator size={'large'} color={'#005FFF'}/>
+          </View>
+          )
+          :
+           children}
+    </SafeAreaView>
+  );
+};
 
-export default Wrapper
+export default Wrapper;

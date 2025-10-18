@@ -1,10 +1,10 @@
-import HomeScreen from "../screens/HomeScreen";
-import LoginScreen from "../screens/LoginScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import RegisterScreen from "../screens/RegisterScreen";
-import SearchFriendScreen from "../screens/SearchFriendScreen";
-import SplashScreen from "../screens/SplashScreen";
-import WelcomeScreen from "../screens/WelcomeScreen";
+import LoginScreen from '../screens/LoginScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import RegisterScreen from '../screens/RegisterScreen';
+import SearchFriendScreen from '../screens/SearchFriendScreen';
+import SplashScreen from '../screens/SplashScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import BottomTabNavigator from './BottomTabNavigator';
 
 const authStack = [
      {
@@ -27,6 +27,10 @@ const authStack = [
 
 const dashboardStack = [
     {
+        name:'BottomTabs',
+        component: BottomTabNavigator,
+    },
+    {
         name:'SearchFriendScreen',
         component: SearchFriendScreen,
     },
@@ -34,4 +38,6 @@ const dashboardStack = [
         name:'ProfileScreen',
         component: ProfileScreen,
     },
-]
+];
+
+export const mergeStack = [...authStack, ...dashboardStack];
