@@ -32,7 +32,6 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
-
 // user register
 const userRegister = asyncHandler(async (req, res) => {
   const { username, email, password, fullname } = req.body;
@@ -62,194 +61,205 @@ const userRegister = asyncHandler(async (req, res) => {
 
 // login controller
 const loginUser = asyncHandler(async (req, res) => {
+  const { email, password, fcmToken } = req.body;
 
-    const { email, password, fcmToken } = req.body
-    
-    if (!email) {
-        throw new ApiError(400, "email are required")
-    }
+  if (!email) {
+    throw new ApiError(400, "email are required");
+  }
 
-    const user = await User.findOne({email})
+  const user = await User.findOne({ email });
 
-    if (!user) {
-        throw new ApiError(404, "Invalid user credantials");
-    }
+  if (!user) {
+    throw new ApiError(404, "Invalid user credantials");
+  }
 
-    const validatePassword = await user.isPasswrodCorrect(password)
+  const validatePassword = await user.isPasswrodCorrect(password);
 
-    if (!validatePassword) {
-        throw new ApiError(401, "Invalid user credantials");
-    }
+  if (!validatePassword) {
+    throw new ApiError(401, "Invalid user credantials");
+  }
 
-    if (fcmToken && user.fcmToken !== fcmToken) {
-          user.fcmToken = fcmToken;
-          await user.save({ validateBeforeSave: false });
-    }
+  if (fcmToken && user.fcmToken !== fcmToken) {
+    user.fcmToken = fcmToken;
+    await user.save({ validateBeforeSave: false });
+  }
 
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
 
-    const loginUser = await User.findById(user._id).select(
-      "-password -refreshToken -watchHistory"
-    );
-    const options ={
-        httpOnly: true,
-        secure: true
-    }
+  const loginUser = await User.findById(user._id).select(
+    "-password -refreshToken -watchHistory"
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
-    return res
-      .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json(
-          new ApiResponse(
-              200,
-              {user:loginUser, accessToken, refreshToken},
-              "User logged In")
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        { user: loginUser, accessToken, refreshToken },
+        "User logged In"
       )
-})
+    );
+});
 
 //google login
-const googleLogin = asyncHandler(async (req, res)=>{
-    const { idToken, fcmToken } = req.body
-    if(!idToken){
-        throw new ApiError(400, "id-token is required")
-    }
-    const ticket = await googleClient.verifyIdToken({
-        idToken,
-        audience: process.env.GOOGLE_CLIENT_ID,
-    })
-    if(!ticket){
-        throw new ApiError(400, "Error ticket, Please try again later")
-    }
+const googleLogin = asyncHandler(async (req, res) => {
+  const { idToken, fcmToken } = req.body;
+  if (!idToken) {
+    throw new ApiError(400, "id-token is required");
+  }
+  const ticket = await googleClient.verifyIdToken({
+    idToken,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  if (!ticket) {
+    throw new ApiError(400, "Error ticket, Please try again later");
+  }
 
-    const payload = ticket.getPayload()
-    if(!payload){
-        throw new ApiError(400, "Error payload, Please try again later")
-    }
-    
-    let user = await User.findOne({email:payload.email})
+  const payload = ticket.getPayload();
+  if (!payload) {
+    throw new ApiError(400, "Error payload, Please try again later");
+  }
 
-    if(!user){
-        const username = payload.email.split("@")[0]
-       user = await User.create({
-            googleId:payload.sub,
-            fullname:payload.name,
-            email:payload.email,
-            avatar:payload.picture,
-            username,
-            fcmToken
-        })
-    }else{
-        if (fcmToken && user.fcmToken !== fcmToken) {
-          user.fcmToken = fcmToken;
-          await user.save({ validateBeforeSave: false });
-        }
-    }
-    
-    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+  let user = await User.findOne({ email: payload.email });
 
-    const loginUser = await User.findById(user._id).select(
-      "-password -refreshToken -watchHistory"
-    )
-    
-    const options ={
-        httpOnly: true,
-        secure: true
+  if (!user) {
+    const username = payload.email.split("@")[0];
+    user = await User.create({
+      googleId: payload.sub,
+      fullname: payload.name,
+      email: payload.email,
+      avatar: payload.picture,
+      username,
+      fcmToken,
+    });
+  } else {
+    if (fcmToken && user.fcmToken !== fcmToken) {
+      user.fcmToken = fcmToken;
+      await user.save({ validateBeforeSave: false });
     }
+  }
 
-    return res
-      .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshToken", refreshToken, options)
-      .json(
-          new ApiResponse(
-              200,
-              {user:loginUser, accessToken, refreshToken},
-              "User logged In")
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+
+  const loginUser = await User.findById(user._id).select(
+    "-password -refreshToken -watchHistory"
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        200,
+        { user: loginUser, accessToken, refreshToken },
+        "User logged In"
       )
-})
+    );
+});
 
 //logout controller
 const logoutUser = asyncHandler(async (req, res) => {
-    await User.findByIdAndUpdate(
-        req.user._id,
-        {
-            $unset: {
-                refreshToken: 1,
-            }
-        },
-        {
-            new: true
-        }
-    )
-    
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
+      },
+    },
+    {
+      new: true,
+    }
+  );
 
-    return res
-      .status(200)
-      .clearCookie("accessToken", options)
-      .clearCookie("refreshToken", options)
-      .json(new ApiResponse(200, {}, "User logged Out"));
-    
-})
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(new ApiResponse(200, {}, "User logged Out"));
+});
 
 //refereh access token controller
-const refreshAccessToken = asyncHandler(async (req, res)=>{
-    const incomingToken = req.cookies?.refreshToken || req.body?.refreshToken
-    console.log("incoming token hear", incomingToken)
-    if(!incomingToken){
-        throw new ApiError(401, "Refresh token not found")
-    }
-    const decoded = jwt.verify(incomingToken, process.env.REFRESH_TOKEN_SECRET)
-    
-        if(!decoded){
-            throw new ApiError(401, "Unauthorized")
-        }
-    
-        const user = await User.findById(decoded?._id).select("-password")
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const incomingToken = req.cookies?.refreshToken || req.body?.refreshToken;
+  console.log("incoming token hear", incomingToken);
+  if (!incomingToken) {
+    throw new ApiError(401, "Refresh token not found");
+  }
+  const decoded = jwt.verify(incomingToken, process.env.REFRESH_TOKEN_SECRET);
 
-        if (!user) {
-            throw new ApiError(401,"Invalid Refresh Token")
-        }
+  if (!decoded) {
+    throw new ApiError(401, "Unauthorized");
+  }
 
-        if (incomingToken !== user.refreshToken) {
-            throw new ApiError(401,"Unauthorized, token not matched")
-        }
+  const user = await User.findById(decoded?._id).select("-password");
 
-        const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
-        console.log("new Refresh Token", refreshToken)
+  if (!user) {
+    throw new ApiError(401, "Invalid Refresh Token");
+  }
 
-        const options = {
-            httpOnly: true,
-            secure: true,
-        };
+  if (incomingToken !== user.refreshToken) {
+    throw new ApiError(401, "Unauthorized, token not matched");
+  }
 
-        return res
-                .status(200)
-                .cookie("accessToken", accessToken, options)
-                .cookie("refreshToken", refreshToken, options)
-                .json(
-                    new ApiResponse(
-                        203,
-                        {
-                            accessToken, 
-                            refreshToken
-                        },
-                        "Access Token Refreshed"
-                    )
-                )
+  const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
+    user._id
+  );
+  console.log("new Refresh Token", refreshToken);
 
-            
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
 
-})
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
+    .json(
+      new ApiResponse(
+        203,
+        {
+          accessToken,
+          refreshToken,
+        },
+        "Access Token Refreshed"
+      )
+    );
+});
 
-export {
-    userRegister,
-    loginUser,
-    googleLogin,
-    logoutUser,
-    refreshAccessToken
-}
+//current user controller
+const getCurrentUser = asyncHandler(async (req, res) => {
+  return res
+    .status(200)
+    .json(new ApiResponse(200, { user: req.user }, { new: true }));
+});
+
+export { 
+  userRegister, 
+  loginUser, 
+  googleLogin, 
+  logoutUser, 
+  refreshAccessToken,
+  getCurrentUser
+};
