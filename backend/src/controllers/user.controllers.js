@@ -196,10 +196,60 @@ const logoutUser = asyncHandler(async (req, res) => {
     
 })
 
+//refereh access token controller
+const refreshAccessToken = asyncHandler(async (req, res)=>{
+    const incomingToken = req.cookies?.refreshToken || req.body?.refreshToken
+    console.log("incoming token hear", incomingToken)
+    if(!incomingToken){
+        throw new ApiError(401, "Refresh token not found")
+    }
+    const decoded = jwt.verify(incomingToken, process.env.REFRESH_TOKEN_SECRET)
+    
+        if(!decoded){
+            throw new ApiError(401, "Unauthorized")
+        }
+    
+        const user = await User.findById(decoded?._id).select("-password")
+
+        if (!user) {
+            throw new ApiError(401,"Invalid Refresh Token")
+        }
+
+        if (incomingToken !== user.refreshToken) {
+            throw new ApiError(401,"Unauthorized, token not matched")
+        }
+
+        const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+        console.log("new Refresh Token", refreshToken)
+
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
+
+        return res
+                .status(200)
+                .cookie("accessToken", accessToken, options)
+                .cookie("refreshToken", refreshToken, options)
+                .json(
+                    new ApiResponse(
+                        203,
+                        {
+                            accessToken, 
+                            refreshToken
+                        },
+                        "Access Token Refreshed"
+                    )
+                )
+
+            
+
+})
 
 export {
     userRegister,
     loginUser,
     googleLogin,
-    logoutUser
+    logoutUser,
+    refreshAccessToken
 }
