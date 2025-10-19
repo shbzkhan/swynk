@@ -32,6 +32,8 @@ const generateAccessAndRefreshToken = async (userId) => {
   }
 };
 
+
+// user register
 const userRegister = asyncHandler(async (req, res) => {
   const { username, email, password, fullname } = req.body;
 
@@ -58,7 +60,117 @@ const userRegister = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, {}, "User registered succesfully"));
 });
 
+// login controller
+const loginUser = asyncHandler(async (req, res) => {
+  
+    const { email, password, fcmToken } = req.body
+    
+    if (!email) {
+        throw new ApiError(400, "email are required")
+    }
+
+    const user = await User.findOne({email})
+
+    if (!user) {
+        throw new ApiError(404, "Invalid user credantials");
+    }
+
+    const validatePassword = await user.isPasswrodCorrect(password)
+
+    if (!validatePassword) {
+        throw new ApiError(401, "Invalid user credantials");
+    }
+
+    if (fcmToken && user.fcmToken !== fcmToken) {
+          user.fcmToken = fcmToken;
+          await user.save({ validateBeforeSave: false });
+    }
+
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+
+    const loginUser = await User.findById(user._id).select(
+      "-password -refreshToken -watchHistory"
+    );
+    const options ={
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+          new ApiResponse(
+              200,
+              {user:loginUser, accessToken, refreshToken},
+              "User logged In")
+      )
+})
+
+//google login
+const googleLogin = asyncHandler(async (req, res)=>{
+    const { idToken, fcmToken } = req.body
+    if(!idToken){
+        throw new ApiError(400, "id-token is required")
+    }
+    const ticket = await googleClient.verifyIdToken({
+        idToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+    })
+    if(!ticket){
+        throw new ApiError(400, "Error ticket, Please try again later")
+    }
+
+    const payload = ticket.getPayload()
+    if(!payload){
+        throw new ApiError(400, "Error payload, Please try again later")
+    }
+    
+    let user = await User.findOne({email:payload.email})
+
+    if(!user){
+        const username = payload.email.split("@")[0]
+       user = await User.create({
+            googleId:payload.sub,
+            fullname:payload.name,
+            email:payload.email,
+            avatar:payload.picture,
+            username,
+            fcmToken
+        })
+    }else{
+        if (fcmToken && user.fcmToken !== fcmToken) {
+          user.fcmToken = fcmToken;
+          await user.save({ validateBeforeSave: false });
+        }
+    }
+    
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+
+    const loginUser = await User.findById(user._id).select(
+      "-password -refreshToken -watchHistory"
+    )
+    
+    const options ={
+        httpOnly: true,
+        secure: true
+    }
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .cookie("refreshToken", refreshToken, options)
+      .json(
+          new ApiResponse(
+              200,
+              {user:loginUser, accessToken, refreshToken},
+              "User logged In")
+      )
+})
 
 export {
-    userRegister
+    userRegister,
+    loginUser,
+    googleLogin
 }
