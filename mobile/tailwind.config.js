@@ -6,8 +6,6 @@ module.exports = {
   theme: {
     extend: {
         fontFamily:{
-        "tinos": ["Tinos-Regular", "sans-serif"],
-        "tinos-bold": ["Tinos-Bold", "sans-serif"],
         "rubik": ["Rubik-Regular", "sans-serif"],
         "rubik-bold": ["Rubik-Bold", "sans-serif"],
         "rubik-extrabold": ["Rubik-ExtraBold", "sans-serif"],
@@ -31,6 +29,6 @@ module.exports = {
       }
     },
   },
-  darkMode: "class",
+  darkMode: "media",
   plugins: [],
 }

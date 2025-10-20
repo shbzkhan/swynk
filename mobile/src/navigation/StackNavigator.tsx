@@ -8,7 +8,7 @@ const StackNavigator = () => {
   return (
     <Stack.Navigator
     screenOptions={{headerShown:false}}
-    initialRouteName="BottomTabs"
+    initialRouteName="SplashScreen"
     >
       {
         mergeStack.map((item,index)=>(

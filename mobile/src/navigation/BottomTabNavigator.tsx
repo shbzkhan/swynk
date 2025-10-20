@@ -1,33 +1,45 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
 import React from 'react';
 import HomeScreen from '../screens/HomeScreen';
-import {MessageCircle} from 'lucide-react-native';
+import {MessageCircle, Shell} from 'lucide-react-native';
 import StoryScreen from '../screens/StoryScreen';
+import { useColorScheme } from 'nativewind';
 
 const BottomTabNavigator = () => {
     const Tab = createBottomTabNavigator();
+    const { colorScheme} = useColorScheme();
 
   return (
      <Tab.Navigator
      screenOptions={()=>({
-       headerShown:false,
+      headerShown:false,
+      tabBarActiveTintColor:'#005FFF',
+      tabBarInactiveTintColor:'#7A7A7A',
+
+      tabBarStyle:{
+        backgroundColor: colorScheme === 'dark' ? '#101418' : '#FFFFFF',
+      },
+      tabBarLabelStyle:{
+        fontSize: 12,
+        fontFamily:'Rubik-Bold',
+        fontWeight: 900,
+      },
      })}
-     initialRouteName="HomeScreen"
+     initialRouteName="Chats"
      >
-      <Tab.Screen name="HomeScreen" component={HomeScreen}
-    //   options={{
-    //     tabBarIcon:({focused, size})=>{
-    //       return <MessageCircle color={'#2563EB'} focused={focused} size={size} />;
-    //     },
-    //   }}
+      <Tab.Screen name="Chats" component={HomeScreen}
+      options={{
+        tabBarIcon:({color, size})=>{
+          return <MessageCircle color={color} size={size} />;
+        },
+      }}
       />
-      <Tab.Screen name="StoryScreen" component={StoryScreen}
-    //   options={{
-    //     tabBarIcon:({focused, size})=>{
-    //       return <MessageCircle color={'#2563EB'} focused={focused} size={size} />;
-    //     },
-    //   }}
+      <Tab.Screen name="Stories" component={StoryScreen}
+      options={{
+        tabBarIcon:({color, size})=>{
+          return <Shell color={color} size={size} />;
+        },
+      }}
       />
     </Tab.Navigator>
   );

@@ -8,8 +8,8 @@ import BottomTabNavigator from './BottomTabNavigator';
 
 const authStack = [
      {
-    name: 'SplashScreen',
-    component: SplashScreen,
+        name: 'SplashScreen',
+        component: SplashScreen,
     },
     {
         name:'WelcomeScreen',

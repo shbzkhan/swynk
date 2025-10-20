@@ -5,7 +5,7 @@ import Wrapper from '../components/common/Wrapper';
 const HomeScreen = () => {
   return (
     <Wrapper>
-      <Text>Hello kaise ho</Text>
+      <Text className="text-black dark:text-white">Hello kaise ho Home Screen</Text>
     </Wrapper>
   );
 };

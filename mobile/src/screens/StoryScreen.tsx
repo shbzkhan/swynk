@@ -5,7 +5,7 @@ import Wrapper from '../components/common/Wrapper';
 const StoryScreen = () => {
   return (
     <Wrapper>
-      <Text className="text-white dark:text-white">Hello kaise ho</Text>
+      <Text className="text-black dark:text-white">Hello kaise ho</Text>
     </Wrapper>
   );
 };
