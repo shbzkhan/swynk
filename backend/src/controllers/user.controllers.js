@@ -89,7 +89,7 @@ const loginUser = asyncHandler(async (req, res) => {
   );
 
   const loginUser = await User.findById(user._id).select(
-    "-password -refreshToken -watchHistory"
+    "-password -refreshToken"
   );
   const options = {
     httpOnly: true,
@@ -152,7 +152,7 @@ const googleLogin = asyncHandler(async (req, res) => {
   );
 
   const loginUser = await User.findById(user._id).select(
-    "-password -refreshToken -watchHistory"
+    "-password -refreshToken"
   );
 
   const options = {
