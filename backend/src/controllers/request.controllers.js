@@ -45,6 +45,9 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
   }
 
   if (request.sender.toString() === req.user._id.toString()) {
+    throw new ApiError(401, "sender can not accept request");
+  }
+  if (request.receiver.toString() !== req.user._id.toString()) {
     throw new ApiError(401, "you can not accept request");
   }
 
