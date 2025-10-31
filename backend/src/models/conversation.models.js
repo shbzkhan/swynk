@@ -1,11 +1,13 @@
 import mongoose, { Schema } from "mongoose";
 const conversationSchema = new Schema(
   {
-    participants: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    participants: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+      },
+    ],
     groupChat: {
       type: Boolean,
       default: false,

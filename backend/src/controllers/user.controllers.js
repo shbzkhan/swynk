@@ -39,7 +39,6 @@ const userRegister = asyncHandler(async (req, res) => {
   if (!username || !email || !fullname || !password) {
     throw new ApiError(400, "All fields are required");
   }
-
   const existUser = await User.findOne({ email });
   if (existUser) throw new ApiError(401, "User already exist");
 
@@ -56,7 +55,7 @@ const userRegister = asyncHandler(async (req, res) => {
 
   return res
     .status(201)
-    .json(new ApiResponse(201, {}, "User registered succesfully"));
+    .json(new ApiResponse(201, user, "User registered succesfully"));
 });
 
 // login controller
