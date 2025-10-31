@@ -9,10 +9,14 @@ const sendRequest = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
 
   const receiver = await User.findById(receiverId);
-
   if (!receiver) {
     throw new ApiError(404, "User not exist");
   }
+
+  if(receiver._id.toString() === req.user._id.toString()){
+    throw new ApiError(404, "You can not send self requests");
+  }
+
   const conversation = await Conversation.findOne({
     participants: { $all: [req.user._id, receiverId] },
   });
@@ -50,13 +54,6 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Request not found");
   }
 
-  if (request.sender.toString() === req.user._id.toString()) {
-    throw new ApiError(401, "sender can not accept request");
-  }
-  if (request.receiver.toString() !== req.user._id.toString()) {
-    throw new ApiError(401, "you can not accept request");
-  }
-
   if (status === "rejected") {
     const deleteRequest = await Request.findByIdAndDelete(request);
     if (!deleteRequest) {
@@ -65,6 +62,14 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
     return res
       .status(201)
       .json(new ApiResponse(201, { accepted: false }, "Rejected successfully"));
+  }
+
+  if (request.sender.toString() === req.user._id.toString()) {
+    throw new ApiError(401, "sender can not accept request");
+  }
+  
+  if (request.receiver.toString() !== req.user._id.toString()) {
+    throw new ApiError(401, "you can not accept request");
   }
 
   const acceptedRequest = await Conversation.create({
@@ -80,29 +85,6 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
     .status(201)
     .json(new ApiResponse(201, { accepted: true }, "Accepted successfully"));
 });
-const cancelRequest = asyncHandler(async (req, res) => {
-  const { requestId } = req.params;
-
-  const request = await Request.findById(requestId);
-
-  if (!request) {
-    throw new ApiError(404, "Request not found");
-  }
-
-  if (request.sender.toString() !== req.user._id.toString()) {
-    throw new ApiError(401, "only sender can cancel request");
-  }
-
-  const deleteRequest = await Request.findByIdAndDelete(request);
-  if (!deleteRequest) {
-    throw new ApiError(400, "Failed to reject the request please try again");
-  }
-  return res
-    .status(201)
-    .json(
-      new ApiResponse(201, { requested: false }, "Cancel request successfully")
-    );
-});
 
 const getUserRequests = asyncHandler(async (req, res) => {
   const userId = new mongoose.Types.ObjectId(req.user._id);
@@ -111,7 +93,6 @@ const getUserRequests = asyncHandler(async (req, res) => {
     {
       $match: {
         receiver: userId,
-        status: "pending",
       },
     },
     {
@@ -120,6 +101,15 @@ const getUserRequests = asyncHandler(async (req, res) => {
         localField: "sender",
         foreignField: "_id",
         as: "sender",
+        pipeline: [
+          {
+            $project: {
+              fullname: 1,
+              username: 1,
+              avatar: 1,
+            },
+          },
+        ],
       },
     },
     {
@@ -142,4 +132,4 @@ const getUserRequests = asyncHandler(async (req, res) => {
     .json(new ApiResponse(201, request, "requests find successfully"));
 });
 
-export { sendRequest, acceptOrRejectRequest, cancelRequest, getUserRequests };
+export { sendRequest, acceptOrRejectRequest, getUserRequests };
