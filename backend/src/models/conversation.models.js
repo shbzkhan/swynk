@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import aggregatePaginate  from "mongoose-aggregate-paginate-v2"
 const conversationSchema = new Schema(
   {
     participants: [
@@ -25,5 +26,7 @@ const conversationSchema = new Schema(
   },
   { timestamps: true }
 );
+
+conversationSchema.plugin(aggregatePaginate)
 
 export const Conversation = mongoose.model("Conversation", conversationSchema);

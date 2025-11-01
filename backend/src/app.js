@@ -18,9 +18,11 @@ app.use(
 //import statement
 import userRouter from "./routes/user.routes.js";
 import requestRouter from "./routes/request.routes.js";
+import conversationRouter from "./routes/conversation.routes.js";
 
 //router declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/requests", requestRouter);
+app.use("/api/v1/conversations", conversationRouter);
 
 export { app };

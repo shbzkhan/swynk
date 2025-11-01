@@ -13,7 +13,7 @@ const sendRequest = asyncHandler(async (req, res) => {
     throw new ApiError(404, "User not exist");
   }
 
-  if(receiver._id.toString() === req.user._id.toString()){
+  if (receiver._id.toString() === req.user._id.toString()) {
     throw new ApiError(404, "You can not send self requests");
   }
 
@@ -60,14 +60,14 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
       throw new ApiError(400, "Failed to reject the request please try again");
     }
     return res
-      .status(201)
-      .json(new ApiResponse(201, { accepted: false }, "Rejected successfully"));
+      .status(200)
+      .json(new ApiResponse(200, { accepted: false }, "Rejected successfully"));
   }
 
   if (request.sender.toString() === req.user._id.toString()) {
     throw new ApiError(401, "sender can not accept request");
   }
-  
+
   if (request.receiver.toString() !== req.user._id.toString()) {
     throw new ApiError(401, "you can not accept request");
   }
@@ -82,8 +82,8 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
   await Request.findByIdAndDelete(request);
 
   return res
-    .status(201)
-    .json(new ApiResponse(201, { accepted: true }, "Accepted successfully"));
+    .status(200)
+    .json(new ApiResponse(200, { accepted: true }, "Accepted successfully"));
 });
 
 const getUserRequests = asyncHandler(async (req, res) => {
@@ -123,13 +123,12 @@ const getUserRequests = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  console.log(request);
   if (!request) {
     throw new ApiError(400, "requests not founded");
   }
   return res
-    .status(201)
-    .json(new ApiResponse(201, request, "requests find successfully"));
+    .status(200)
+    .json(new ApiResponse(200, request, "requests find successfully"));
 });
 
 export { sendRequest, acceptOrRejectRequest, getUserRequests };
