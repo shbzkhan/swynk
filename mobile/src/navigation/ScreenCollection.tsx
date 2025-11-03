@@ -1,4 +1,6 @@
+import EmailAddressScreen from '../screens/EmailAddressScreen';
 import LoginScreen from '../screens/LoginScreen';
+import OTPScreen from '../screens/OTPScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import SearchFriendScreen from '../screens/SearchFriendScreen';
@@ -14,6 +16,14 @@ const authStack = [
     {
         name:'WelcomeScreen',
         component: WelcomeScreen,
+    },
+    {
+        name:'EmailAddressScreen',
+        component: EmailAddressScreen,
+    },
+    {
+        name:'OTPScreen',
+        component: OTPScreen,
     },
     {
         name:'RegisterScreen',

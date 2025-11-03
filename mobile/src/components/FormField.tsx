@@ -7,7 +7,7 @@ interface formFiledProps {
     placeholder:string
     handleChangeText:(e:string)=>void
 }
-const FormField:FC<formFiledProps> = ({title, value, placeholder, handleChangeText}) => {
+const FormField:FC<formFiledProps> = ({title, value, placeholder, handleChangeText,...props}) => {
   return (
    <View className="px-4 py-3 rounded-2xl bg-light-secondary dark:bg-dark-secondary">
         <Text className="font-rubik-semibold text-text">{title}</Text>
@@ -17,6 +17,8 @@ const FormField:FC<formFiledProps> = ({title, value, placeholder, handleChangeTe
             placeholder={placeholder}
             onChangeText={handleChangeText}
             secureTextEntry={title === 'Password'}
+            selectionColor="#005FFF"
+            {...props}
         />
    </View>
   );

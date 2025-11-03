@@ -20,7 +20,7 @@ const WelcomeScreen = () => {
       <Text className="text-center font-rubik-medium text-text">Please Login in Swynk app</Text>
       <View className="gap-6">
         <CustomButton
-        title="Login via Google"
+        title="Login with Google"
         // handlePress={()=>navi}
         />
         <CustomButton

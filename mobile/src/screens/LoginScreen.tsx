@@ -49,9 +49,9 @@ const LoginScreen = () => {
         title="Login"
         />
       </View>
-      <Pressable className="flex-row items-center justify-center gap-1" onPress={() => navigate('RegisterScreen')}>
+      <Pressable className="flex-row items-center justify-center gap-1" onPress={() => navigate('EmailAddressScreen')}>
         <Text className="font-rubik text-text">Create a new account?</Text>
-                          <TouchableOpacity onPress={() => navigate('RegisterScreen')}>
+                          <TouchableOpacity onPress={() => navigate('EmailAddressScreen')}>
                             <Text className="text-primary font-rubik-bold">
                               Register
                             </Text>
