@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import aggregatePaginate  from "mongoose-aggregate-paginate-v2"
 const messageSchema = new Schema(
   {
     content: {
@@ -17,5 +18,6 @@ const messageSchema = new Schema(
   },
   { timestamps: true }
 );
+messageSchema.plugin(aggregatePaginate)
 
 export const Message = mongoose.model("Message", messageSchema);

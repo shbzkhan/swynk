@@ -6,6 +6,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/user.models.js";
+import { generateOTP } from "../utils/otpGenerator.js";
+import { mailSender } from "../utils/nodemailer.js";
 
 //googleClientId
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -31,6 +33,32 @@ const generateAccessAndRefreshToken = async (userId) => {
     );
   }
 };
+
+//send otp
+const otpSend = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  if (!email ) {
+    throw new ApiError(400, "Email is required");
+  }
+  const existUser = await User.findOne({ email });
+
+  if (existUser) {
+    throw new ApiError(400, "Email already registered");
+  }
+
+  const otp = generateOTP();
+  console.log("OTP");
+  if (!otp) {
+    throw new ApiError(400, "otp send failed");
+  }
+
+  //send otp to user email
+  await mailSender(otp, email);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, otp, "OTP send successfully"));
+});
 
 // user register
 const userRegister = asyncHandler(async (req, res) => {
@@ -254,11 +282,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user: req.user }, { new: true }));
 });
 
-export { 
-  userRegister, 
-  loginUser, 
-  googleLogin, 
-  logoutUser, 
+export {
+  otpSend,
+  userRegister,
+  loginUser,
+  googleLogin,
+  logoutUser,
   refreshAccessToken,
-  getCurrentUser
+  getCurrentUser,
 };

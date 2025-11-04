@@ -4,6 +4,7 @@ import {
   googleLogin,
   loginUser,
   logoutUser,
+  otpSend,
   refreshAccessToken,
   userRegister,
 } from "../controllers/user.controllers.js";
@@ -12,6 +13,7 @@ import { auth } from "../middlewares/auth.middlewares.js";
 
 const router = Router();
 
+router.route("/send-otp").get(otpSend);
 router.route("/register").post(userRegister);
 router.route("/login").post(loginUser);
 router.route("/google-login").post(googleLogin);

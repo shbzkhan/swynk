@@ -51,7 +51,7 @@ const getUserConversation = asyncHandler(async (req, res) => {
     participantsAggregate,
     options
   );
-// await Conversation.aggregatePag
+
   if (!participants) {
     throw new ApiError(400, "conversation not founded");
   }
@@ -80,4 +80,5 @@ const deleteConversation = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "conversation deleted successfully"));
 });
 
-export { getUserConversation };
+
+export { getUserConversation, deleteConversation };
