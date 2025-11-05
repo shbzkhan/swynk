@@ -4,17 +4,19 @@ import {
   googleLogin,
   loginUser,
   logoutUser,
-  otpSend,
+  sendOtp,
   refreshAccessToken,
   userRegister,
+  verifyOtp,
 } from "../controllers/user.controllers.js";
 import { auth } from "../middlewares/auth.middlewares.js";
-// import { upload } from "../middlewares/multer.middleware
+import { upload } from "../middlewares/multer.middleware
 
 const router = Router();
 
-router.route("/send-otp").get(otpSend);
-router.route("/register").post(userRegister);
+router.route("/send-otp").post(sendOtp);
+router.route("/verify-otp").post(verifyOtp);
+router.route("/register").post(upload.single("avatar"), userRegister);
 router.route("/login").post(loginUser);
 router.route("/google-login").post(googleLogin);
 router.route("/logout").post(auth, logoutUser);

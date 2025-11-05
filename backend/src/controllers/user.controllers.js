@@ -8,6 +8,8 @@ import { OAuth2Client } from "google-auth-library";
 import { User } from "../models/user.models.js";
 import { generateOTP } from "../utils/otpGenerator.js";
 import { mailSender } from "../utils/nodemailer.js";
+import { Otp } from "../models/Otp.models.js";
+import { PendingUser } from "../models/PendingUser.models.js";
 
 //googleClientId
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -35,9 +37,9 @@ const generateAccessAndRefreshToken = async (userId) => {
 };
 
 //send otp
-const otpSend = asyncHandler(async (req, res) => {
+const sendOtp = asyncHandler(async (req, res) => {
   const { email } = req.body;
-  if (!email ) {
+  if (!email) {
     throw new ApiError(400, "Email is required");
   }
   const existUser = await User.findOne({ email });
@@ -47,35 +49,114 @@ const otpSend = asyncHandler(async (req, res) => {
   }
 
   const otp = generateOTP();
-  console.log("OTP");
   if (!otp) {
     throw new ApiError(400, "otp send failed");
   }
 
+  await Otp.findOneAndUpdate(
+    { email },
+    {
+      otp,
+      expiresAt: Date.now() + 5 * 60 * 1000,
+    },
+    {
+      upsert: true,
+      new: true,
+    }
+  );
   //send otp to user email
   await mailSender(otp, email);
 
   return res
     .status(200)
-    .json(new ApiResponse(200, otp, "OTP send successfully"));
+    .json(new ApiResponse(200, {}, "OTP send successfully"));
+});
+
+//verify OTP
+const verifyOtp = asyncHandler(async (req, res) => {
+  const { otp, email } = req.body;
+
+  if (!email || !otp) throw new ApiError(400, "Email or OTP are required");
+
+  const existOtp = await Otp.findOne({ email });
+
+  if (!existOtp) throw new ApiError(404, "OTP not found");
+
+  if (Date.now() > existOtp.expiresAt.getTime()) {
+    await Otp.deleteOne({ email });
+    throw new ApiError(401, "OTP expired");
+  }
+
+  const validateOtp = await existOtp.isOtpCorrect(otp);
+
+  if (!validateOtp) throw new ApiError(401, "Invalid OTP");
+
+  await Otp.deleteOne({ email });
+
+  await PendingUser.findOneAndUpdate(
+    { email },
+    {
+      verified: true,
+      verifiedAt: Date.now(),
+    },
+    {
+      upsert: true,
+      new: true,
+    }
+  );
+
+  const otpToken = jwt.sign(
+    { email, verified: true },
+    process.env.OTP_TOKEN_SECRET,
+    { expiresIn: process.env.OTP_TOKEN_EXPIRY }
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, otpToken, "OTP verified successfully"));
 });
 
 // user register
 const userRegister = asyncHandler(async (req, res) => {
-  const { username, email, password, fullname } = req.body;
+  const { username, otpToken, password, fullname } = req.body;
 
-  if (!username || !email || !fullname || !password) {
+  if (!username || !otpToken || !fullname || !password) {
     throw new ApiError(400, "All fields are required");
   }
+
+  let payload = jwt.verify(otpToken, process.env.OTP_TOKEN_SECRET);
+  if (!payload) {
+    throw new ApiError(401, "Unauthorized");
+  }
+  const email = payload.email;
+  if (!email) throw new ApiError(400, "Invalid token payload");
+
+  const pendingUser = await PendingUser.findOne({ email });
+  if (!pendingUser || !pendingUser.verified) {
+    throw new ApiError(400, "Email not verified");
+  }
+
   const existUser = await User.findOne({ email });
   if (existUser) throw new ApiError(401, "User already exist");
+
+  let avatar;
+  const avatarLocalPath = req.file?.path;
+  if (avatarLocalPath) {
+    avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar.secure_url) {
+      throw new ApiError(400, "Avatar Image not update try again");
+    }
+  }
 
   const user = await User.create({
     fullname,
     email,
     username,
     password,
-    avatar: `https://api.dicebear.com/9.x/initials/png?seed=${fullname}`,
+    avatar:{
+      url:avatar.secure_url || `https://api.dicebear.com/9.x/initials/png?seed=${fullname}`,
+      public_id: avatar.public_id || '',
+    },
     fcmToken: "",
   });
 
@@ -283,7 +364,8 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 export {
-  otpSend,
+  sendOtp,
+  verifyOtp,
   userRegister,
   loginUser,
   googleLogin,
