@@ -18,11 +18,13 @@ module.exports = {
         light:{
           DEFAULT:"#FCFCFC",
           "secondary":"#F2F2F2",
+          "border":"#ECEBEB"
         },
         dark:{
           DEFAULT:"#070A0D",
           50:"#101418",
           "secondary":"#13151B",
+          "border":"#1C1E22"
         },
         text:"#7A7A7A",
         danger:"#FF3742"

@@ -1,10 +1,15 @@
 import '../global.css';
 import React from 'react';
 import MainNavigator from './navigation/MainNavigator';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
 
 const App = () => {
   return (
-    <MainNavigator/>
+    <Provider store={store}>
+      <MainNavigator/>
+    </Provider>
+
   );
 };
 
