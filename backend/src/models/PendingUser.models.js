@@ -10,7 +10,7 @@ const pendingUserSchema = new Schema(
       unique: true,
     },
     verified: {
-      type: Date,
+      type: Boolean,
       default:false
     },
     verifiedAt: {

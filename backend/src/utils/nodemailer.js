@@ -51,7 +51,7 @@ export const mailSender = async (otp, email) => {
         const response = await transporter.sendMail({
           from: `"Team Swynk" ${process.env.MAIL_ID}`,
           to: `${email}`,
-          subject: "Account verification OTP",
+          subject:`Account verification OTP ${otp}`,
           html: htmlTemplate,
         });
     } catch (error) {

@@ -10,7 +10,7 @@ import {
   verifyOtp,
 } from "../controllers/user.controllers.js";
 import { auth } from "../middlewares/auth.middlewares.js";
-import { upload } from "../middlewares/multer.middleware
+import { upload } from "../middlewares/multer.middlewares.js";
 
 const router = Router();
 

@@ -25,13 +25,15 @@ const OtpSchema = new Schema(
   { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("otp")) return next();
-  this.otp = await bcrypt.hash(this.otp, 10);
-  next();
+OtpSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate();
+  if (update.otp) {
+    update.otp = await bcrypt.hash(update.otp, 10);
+    this.setUpdate(update);
+  }
 });
 
-userSchema.methods.isOtpCorrect = async function (otp) {
+OtpSchema.methods.isOtpCorrect = async function (otp) {
   return bcrypt.compare(otp, this.otp);
 };
 
