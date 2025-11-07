@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import { Story } from "../models/story.models";
-import { ApiError } from "../utils/ApiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { uploadOnCloudinary } from "../utils/cloudinary";
+import { Story } from "../models/story.models.js";
+import { ApiError } from "../utils/ApiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 const createStory = asyncHandler(async (req, res) => {
   const { caption } = req.body;
