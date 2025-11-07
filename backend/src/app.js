@@ -19,10 +19,12 @@ app.use(
 import userRouter from "./routes/user.routes.js";
 import requestRouter from "./routes/request.routes.js";
 import conversationRouter from "./routes/conversation.routes.js";
+import storyRouter from "./routes/story.routes.js";
 
 //router declaration
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/requests", requestRouter);
 app.use("/api/v1/conversations", conversationRouter);
+app.use("/api/v1/stories", storyRouter);
 
 export { app };
