@@ -77,7 +77,7 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
   });
 
   if (!acceptedRequest) {
-    throw new ApiError(500, "Request send failed, please try again");
+    throw new ApiError(500, "Request acception failed, please try again");
   }
   await Request.findByIdAndDelete(request);
 
