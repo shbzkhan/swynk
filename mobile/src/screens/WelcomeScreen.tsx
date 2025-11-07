@@ -21,7 +21,7 @@ const WelcomeScreen = () => {
       <View className="gap-6">
         <CustomButton
         title="Login with Google"
-        // handlePress={()=>navi}
+        handlePress={()=>navigate('BottomTabs')}
         />
         <CustomButton
         title="Continue with Email"
