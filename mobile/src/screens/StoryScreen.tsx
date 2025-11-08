@@ -1,11 +1,12 @@
-import React from 'react';
-import { Text } from 'react-native';
 import Wrapper from '../components/common/Wrapper';
+import HomeHeader from '../components/home/HomeHeader';
 
 const StoryScreen = () => {
   return (
     <Wrapper>
-      <Text className="text-black dark:text-white">Hello kaise ho</Text>
+      <HomeHeader
+      title="Swynk Story"
+      />
     </Wrapper>
   );
 };

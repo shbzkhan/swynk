@@ -37,16 +37,24 @@ const LoginScreen = () => {
         placeholder="Enter your email"
         handleChangeText={(e)=>setForm({...form, email:e})}
         />
+        <View>
         <FormField
         title="Password"
         value={form.password}
         placeholder="Enter your password"
         handleChangeText={(e)=>setForm({...form, password:e})}
         />
+        <TouchableOpacity
+        onPress={()=>navigate('EmailAddressScreen')}
+        >
+          <Text className="px-2 mt-1 text-sm text-right text-primary font-rubik">Forget password ?</Text>
+        </TouchableOpacity>
+        </View>
       </View>
       <View className="gap-6">
         <CustomButton
         title="Login"
+        handlePress={()=>navigate("BottomTabs")}
         />
       </View>
       <Pressable className="flex-row items-center justify-center gap-1" onPress={() => navigate('EmailAddressScreen')}>

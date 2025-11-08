@@ -4,12 +4,14 @@ import HomeScreen from '../screens/HomeScreen';
 import {MessageCircle, Shell} from 'lucide-react-native';
 import StoryScreen from '../screens/StoryScreen';
 import { useColorScheme } from 'nativewind';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const BottomTabNavigator = () => {
     const Tab = createBottomTabNavigator();
     const { colorScheme} = useColorScheme();
 
   return (
+    <SafeAreaView className="flex-1 bg-white dark:bg-dark" edges={['bottom']}>
      <Tab.Navigator
      screenOptions={()=>({
       headerShown:false,
@@ -18,6 +20,9 @@ const BottomTabNavigator = () => {
 
       tabBarStyle:{
         backgroundColor: colorScheme === 'dark' ? '#101418' : '#FFFFFF',
+        borderTopWidth: 1,
+        borderTopColor: colorScheme === 'dark' ? '#101418' : '#FFFFFF',
+        elevation: 0,
       },
       tabBarLabelStyle:{
         fontSize: 12,
@@ -42,6 +47,7 @@ const BottomTabNavigator = () => {
       }}
       />
     </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 

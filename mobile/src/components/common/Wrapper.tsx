@@ -9,7 +9,7 @@ interface WrapperProps{
 }
 const Wrapper:FC<WrapperProps> = ({loading = false, children, className}) => {
   return (
-    <SafeAreaView className={`flex-1 bg-white dark:bg-dark px-3 ${className}`}>
+    <SafeAreaView className={`flex-1 bg-white dark:bg-dark ${className}`}>
         {loading ? (
           <View className="items-center justify-center flex-1">
             <ActivityIndicator size={'large'} color={'#005FFF'}/>

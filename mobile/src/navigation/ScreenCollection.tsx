@@ -1,5 +1,6 @@
 import EmailAddressScreen from '../screens/EmailAddressScreen';
 import LoginScreen from '../screens/LoginScreen';
+import MessageScreen from '../screens/MessageScreen';
 import OTPScreen from '../screens/OTPScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -47,6 +48,10 @@ const dashboardStack = [
     {
         name:'ProfileScreen',
         component: ProfileScreen,
+    },
+    {
+        name:'MessageScreen',
+        component: MessageScreen,
     },
 ];
 
