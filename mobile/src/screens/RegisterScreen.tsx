@@ -19,7 +19,7 @@ interface formProps {
 const RegisterScreen = () => {
    const route = useRoute();
       const { otpToken } = route.params as string | any;
-      console.log("otpToken ",otpToken)
+      console.log("otpToken",otpToken)
   const [form, setForm] = useState<formProps>({
       fullname:'',
       username:'',
@@ -42,7 +42,7 @@ const RegisterScreen = () => {
 };
 
   return (
-    <Wrapper>
+    <Wrapper className="px-3">
       <KeyboardAvoidingView behavior="padding">
         <ScrollView contentContainerClassName="justify-center gap-6 pt-12" showsVerticalScrollIndicator={false}>
         <View>

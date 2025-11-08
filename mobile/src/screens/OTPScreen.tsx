@@ -53,7 +53,7 @@ const OTPScreen = () => {
                  }
     };
   return (
-    <Wrapper>
+    <Wrapper className="px-3">
         <View className="justify-start flex-1 pt-12">
             <AuthHeader
             headerText="Varification Code"

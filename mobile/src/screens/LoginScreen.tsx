@@ -15,7 +15,7 @@ const LoginScreen = () => {
     password:'',
   });
   return (
-    <Wrapper>
+    <Wrapper className="px-3">
       <KeyboardAvoidingView behavior="padding">
         <ScrollView contentContainerClassName="justify-center gap-6" showsVerticalScrollIndicator={false}>
       <View className="items-center justify-center">

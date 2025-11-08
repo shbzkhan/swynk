@@ -5,7 +5,7 @@ import { navigate } from '../navigation/NavigationUtils';
 
 const WelcomeScreen = () => {
   return (
-    <Wrapper className="justify-center gap-6">
+    <Wrapper className="justify-center gap-6 px-3">
       <View className="items-center justify-center">
       <Image
       source={require('../assets/images/logo.png')}

@@ -7,7 +7,7 @@ import UserCard from '../components/home/UserCard';
 
 const HomeScreen = () => {
   return (
-    <Wrapper className="px-0">
+    <Wrapper>
       <HomeHeader
       title="Swynk Chat"
       />

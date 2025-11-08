@@ -27,7 +27,7 @@ const EmailAddressScreen = () => {
             }
     };
   return (
-    <Wrapper>
+    <Wrapper className="px-3">
         <View className="justify-start flex-1 pt-12">
             <AuthHeader
                 headerText="Your Email Address"
