@@ -8,6 +8,7 @@ export type VerifyOTPResponseData = {
   otpToken: string;
 };
 export type UserData =  {
+  user: any;
   accessToken(arg0: string, accessToken: any): unknown;
   _id: string
   fullname: string

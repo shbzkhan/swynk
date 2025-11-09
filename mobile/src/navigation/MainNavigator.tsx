@@ -6,18 +6,19 @@ import { ToastProvider } from 'react-native-toast-notifications';
 import { useDispatch } from 'react-redux';
 import { useCurrentUserQuery } from '../redux/api/userApi';
 import { userData } from '../redux/slice/userSlice';
-import { navigate, navigationRef } from './NavigationUtils';
+import { navigationRef } from './NavigationUtils';
 import StackNavigator from './StackNavigator';
 const MainNavigator = () => {
   const { colorScheme} = useColorScheme();
   const dispatch = useDispatch();
   const {data, isLoading:currentDataLoading} = useCurrentUserQuery();
   useEffect(()=>{
-        if(currentDataLoading) return;
+        if(currentDataLoading) {return;}
         if(data) {
           const user = data?.data?.user;
           dispatch(userData(user));
         }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[data, dispatch]);
 if(currentDataLoading){
   return <ActivityIndicator/>;

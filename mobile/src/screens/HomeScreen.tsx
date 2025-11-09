@@ -3,9 +3,10 @@ import React, { useEffect } from 'react';
 import { FlatList, TextInput, View } from 'react-native';
 import Wrapper from '../components/common/Wrapper';
 import HomeHeader from '../components/home/HomeHeader';
-import UserCard from '../components/home/UserCard';
+import ChatCard from '../components/home/ChatCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+
 
 const HomeScreen = () => {
   const {user} = useSelector((state:RootState)=>state.auth);
@@ -19,7 +20,7 @@ const HomeScreen = () => {
       keyExtractor={(index)=>index}
       showsVerticalScrollIndicator={false}
       renderItem={()=>(
-        <UserCard/>
+        <ChatCard/>
       )}
       ListHeaderComponent={
         <View className="px-3 my-3">
