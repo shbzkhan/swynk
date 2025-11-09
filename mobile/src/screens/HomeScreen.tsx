@@ -1,13 +1,16 @@
 import { Search } from 'lucide-react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FlatList, TextInput, View } from 'react-native';
 import Wrapper from '../components/common/Wrapper';
 import HomeHeader from '../components/home/HomeHeader';
 import UserCard from '../components/home/UserCard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const HomeScreen = () => {
+  const {user} = useSelector((state:RootState)=>state.auth);
   return (
-    <Wrapper>
+    <Wrapper isBottomTabs={true}>
       <HomeHeader
       title="Swynk Chat"
       />

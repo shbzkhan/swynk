@@ -3,7 +3,7 @@ import HomeHeader from '../components/home/HomeHeader';
 
 const StoryScreen = () => {
   return (
-    <Wrapper>
+    <Wrapper isBottomTabs={true}>
       <HomeHeader
       title="Swynk Story"
       />

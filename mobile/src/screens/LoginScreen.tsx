@@ -1,9 +1,15 @@
 import { View, Text, Image, KeyboardAvoidingView, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import CustomButton from '../components/common/CustomButton';
-import { goBack, navigate } from '../navigation/NavigationUtils';
+import { navigate, resetAndNavigate } from '../navigation/NavigationUtils';
 import Wrapper from '../components/common/Wrapper';
 import FormField from '../components/FormField';
 import { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ToastShow } from '../utils/toast';
+import { userData } from '../redux/slice/userSlice';
+import { useDispatch } from 'react-redux';
+import { useLoginMutation } from '../redux/api/userApi';
 
 interface formProps {
   email:string
@@ -14,6 +20,30 @@ const LoginScreen = () => {
     email:'',
     password:'',
   });
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  const handleLogin = async () => {
+    // const fcmToken = await AsyncStorage.getItem("fcmToken");
+    try {
+      const userLoggedIn = await login(form).unwrap();
+      ToastShow(userLoggedIn.message, 'success');
+      dispatch(userData(userLoggedIn.data.user));
+      await AsyncStorage.setItem(
+        'access-token',
+        userLoggedIn?.data.accessToken,
+      );
+      await AsyncStorage.setItem(
+        'refresh-token',
+        userLoggedIn?.data.refreshToken,
+      );
+      resetAndNavigate('BottomTabs');
+    } catch (err) {
+      const error = err as FetchBaseQueryError;
+      const errorMsg = error.data as { message: string };
+      ToastShow(errorMsg.message, 'danger');
+    }
+  };
   return (
     <Wrapper className="px-3">
       <KeyboardAvoidingView behavior="padding">
@@ -53,8 +83,9 @@ const LoginScreen = () => {
       </View>
       <View className="gap-6">
         <CustomButton
+        loading={isLoading}
         title="Login"
-        handlePress={()=>navigate("BottomTabs")}
+        handlePress={handleLogin}
         />
       </View>
       <Pressable className="flex-row items-center justify-center gap-1" onPress={() => navigate('EmailAddressScreen')}>

@@ -1,13 +1,16 @@
 import { View, Text, KeyboardAvoidingView, Image, TouchableOpacity, Pressable, ScrollView } from 'react-native';
 import React, { useState } from 'react';
 import CustomButton from '../components/common/CustomButton';
-import { goBack, navigate, resetAndNavigate } from '../navigation/NavigationUtils';
+import {resetAndNavigate } from '../navigation/NavigationUtils';
 import FormField from '../components/FormField';
 import Wrapper from '../components/common/Wrapper';
 import { Camera } from 'lucide-react-native';
 import AuthHeader from '../components/auth/AuthHeader';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useRoute } from '@react-navigation/native';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ToastShow } from '../utils/toast';
+import { useRegisterMutation } from '../redux/api/userApi';
 
 interface formProps {
   fullname:string
@@ -40,6 +43,21 @@ const RegisterScreen = () => {
         setImage(image.path);
     });
 };
+
+  const [register, { isLoading }] = useRegisterMutation();
+
+  const handleRegister = async () => {
+    try {
+      const user = await register(form).unwrap();
+      ToastShow(user.message, 'success');
+      resetAndNavigate('LoginScreen');
+    } catch (err) {
+      const error = err as FetchBaseQueryError;
+      const errorMsg = error.data as { message: string };
+      ToastShow(errorMsg.message, 'danger');
+    }
+  };
+
 
   return (
     <Wrapper className="px-3">
@@ -93,7 +111,8 @@ const RegisterScreen = () => {
       <View className="gap-6">
         <CustomButton
         title="Register"
-        handlePress={()=>navigate('BottomTabs')}
+        loading={isLoading}
+        handlePress={handleRegister}
         />
       </View>
       </ScrollView>
