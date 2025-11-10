@@ -4,7 +4,7 @@ import { Paperclip, Send } from 'lucide-react-native';
 import UserLogo from '../common/UserLogo';
 
 const MessageInput = () => {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   return (
     <KeyboardAvoidingView behavior={isFocused && 'padding'}>
@@ -15,11 +15,14 @@ const MessageInput = () => {
         <View className="items-center justify-center flex-1 px-2 border rounded-full border-light-border dark:border-dark-border">
         <TextInput
         onChangeText={(e)=>setText(e)}
+        value={text}
         className="w-full text-black dark:text-white placeholder:text-text font-rubik"
-        placeholder="Type message here"
+        placeholder="Send a message"
         selectionColor="#005FFF"
          onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        // onSubmitEditing={submit}
+        submitBehavior={'submit'}
         />
         </View>
         <TouchableOpacity className="items-center justify-center p-2 ml-3 rounded-md bg-primary">
