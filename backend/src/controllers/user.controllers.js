@@ -147,18 +147,32 @@ const userRegister = asyncHandler(async (req, res) => {
       throw new ApiError(400, "Avatar Image not update try again");
     }
   }
-
-  const user = await User.create({
-    fullname,
-    email,
-    username,
-    password,
-    avatar:{
-      url:avatar.secure_url || `https://api.dicebear.com/9.x/initials/png?seed=${fullname}`,
-      public_id: avatar.public_id || '',
-    },
-    fcmToken: "",
-  });
+  let user;
+  if (avatarLocalPath) {
+    await User.create({
+      fullname,
+      email,
+      username,
+      password,
+      avatar: {
+        url:
+          avatar.secure_url,
+      },
+      fcmToken: "",
+    });
+  } else {
+    user = await User.create({
+      fullname,
+      email,
+      username,
+      password,
+      avatar: {
+        url:
+          `https://api.dicebear.com/9.x/initials/png?seed=${fullname}`,
+      },
+      fcmToken: "",
+    });
+  }
 
   if (!user) throw new ApiError(404, "User not created");
 

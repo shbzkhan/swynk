@@ -28,8 +28,12 @@ const userSchema = new Schema(
       trim: true,
     },
     avatar: {
-      type: String,
-      required: true,
+      url:{
+        type: String
+      },
+      public_id:{
+        type: String,
+      }
     },
     refreshToken: {
       type: String,
