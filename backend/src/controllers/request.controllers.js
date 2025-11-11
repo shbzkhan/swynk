@@ -5,6 +5,7 @@ import { User } from "../models/user.models.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { sendNotificationToDevice } from "../utils/sendNotificationToDevice.js";
 const sendRequest = asyncHandler(async (req, res) => {
   const { receiverId } = req.params;
 
@@ -37,7 +38,14 @@ const sendRequest = asyncHandler(async (req, res) => {
 
   if (!createRequest)
     throw new ApiError(500, "Request send failed, please try again");
-
+   if (receiver.fcmToken) {
+      await sendNotificationToDevice({
+        token: receiver.fcmToken,
+        title: req.user.username,
+        body: `${req.user.fullname} send request,`,
+        imageUrl: req.user.avatar,
+      });
+    }
   return res
     .status(201)
     .json(
@@ -48,7 +56,7 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
   const { requestId } = req.params;
   const { status } = req.body;
 
-  const request = await Request.findById(requestId);
+  const request = await Request.findById(requestId).populate("sender")
 
   if (!request) {
     throw new ApiError(404, "Request not found");
@@ -80,7 +88,14 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
     throw new ApiError(500, "Request acception failed, please try again");
   }
   await Request.findByIdAndDelete(request);
-
+if (request.sender.fcmToken) {
+      await sendNotificationToDevice({
+        token: request.sender.fcmToken,
+        title: req.user.username,
+        body: `${req.user.fullname} accept request,`,
+        imageUrl: req.user.avatar,
+      });
+    }
   return res
     .status(200)
     .json(new ApiResponse(200, { accepted: true }, "Accepted successfully"));
