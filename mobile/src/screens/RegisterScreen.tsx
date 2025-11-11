@@ -9,25 +9,26 @@ import AuthHeader from '../components/auth/AuthHeader';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useRoute } from '@react-navigation/native';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
-import { ToastShow } from '../utils/toast';
+import { ToastLoading, ToastShow } from '../utils/toast';
 import { useRegisterMutation } from '../redux/api/userApi';
+import { ErrorShow } from '../utils/error';
 
-interface formProps {
+export interface formProps {
   fullname:string
   username:string
-  email:string
   password:string
+  otpToken:string
 }
 
 const RegisterScreen = () => {
    const route = useRoute();
       const { otpToken } = route.params as string | any;
-      console.log("otpToken",otpToken)
+      console.log('otpToken',otpToken);
   const [form, setForm] = useState<formProps>({
       fullname:'',
       username:'',
-      email:'',
       password:'',
+      otpToken:otpToken,
     });
 
     const [image, setImage] = useState('');
@@ -47,14 +48,14 @@ const RegisterScreen = () => {
   const [register, { isLoading }] = useRegisterMutation();
 
   const handleRegister = async () => {
+    console.log("otpTokensverification", form.otpToken);
+    const toastId = ToastLoading('Profile creating');
     try {
       const user = await register(form).unwrap();
-      ToastShow(user.message, 'success');
+      ToastShow(user.message, toastId);
       resetAndNavigate('LoginScreen');
     } catch (err) {
-      const error = err as FetchBaseQueryError;
-      const errorMsg = error.data as { message: string };
-      ToastShow(errorMsg.message, 'danger');
+      ErrorShow(err, toastId);
     }
   };
 
@@ -110,7 +111,7 @@ const RegisterScreen = () => {
       </View>
       <View className="gap-6">
         <CustomButton
-        title="Register"
+        title="Create Profile"
         loading={isLoading}
         handlePress={handleRegister}
         />

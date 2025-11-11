@@ -5,8 +5,9 @@ import Wrapper from '../components/common/Wrapper';
 import AuthHeader from '../components/auth/AuthHeader';
 import { useRoute } from '@react-navigation/native';
 import { useOtpSendMutation, useOtpVerifyMutation } from '../redux/api/userApi';
-import { ToastShow } from '../utils/toast';
+import { ToastLoading, ToastShow } from '../utils/toast';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorShow } from '../utils/error';
 
 const OTPScreen = () => {
      const route = useRoute();
@@ -24,32 +25,30 @@ const OTPScreen = () => {
      },[timer]);
 
      const handleOtpVerification = async ()=>{
+        const toastId = ToastLoading('OTP verifing');
         try {
                     const otpVerification = await otpVerify({email, otp}).unwrap();
                     console.log(otpVerification);
-                    ToastShow(otpVerification.message);
+                    ToastShow(otpVerification.message, toastId);
                     navigate('RegisterScreen',{otpToken:otpVerification.data});
                 } catch (err) {
-                    const error = err as FetchBaseQueryError;
-                    const errorMsg = error.data as { message: string };
-                    ToastShow(errorMsg.message, 'danger');
+                    ErrorShow(err, toastId);
                 }
      };
 
     const [otpSend] = useOtpSendMutation();
     const handleSendOtp = async() => {
              if(!email.trim().endsWith('@gmail.com')){
-                 return ToastShow('Enter valid email address','danger');
+                 return ToastShow('Enter valid email address', null, 'danger');
              }
+             const toastId = ToastLoading('Please wait');
                  try {
                     setTimer(30);
                      const sendOtp = await otpSend(email).unwrap();
                      console.log(sendOtp);
-                     ToastShow(sendOtp.message);
+                     ToastShow(sendOtp.message, toastId);
                  } catch (err) {
-                     const error = err as FetchBaseQueryError;
-                     const errorMsg = error.data as { message: string };
-                     ToastShow(errorMsg.message, 'danger');
+                     ErrorShow(err, toastId);
                  }
     };
   return (
@@ -69,6 +68,7 @@ const OTPScreen = () => {
             keyboardType="number-pad"
             maxLength={6}
             autoFocus
+            editable={!isLoading}
             returnKeyType="send"
             selectionColor="#005FFF"
             onSubmitEditing={handleOtpVerification}
@@ -76,7 +76,7 @@ const OTPScreen = () => {
         </View>
         <KeyboardAvoidingView behavior="padding">
         <View className="flex-row justify-between px-6 pb-6 ">
-            <TouchableOpacity onPress={()=>goBack()}>
+            <TouchableOpacity onPress={()=>goBack()} disabled={isLoading}>
                 <Text className="text-base text-primary font-rubik">Cancel</Text>
             </TouchableOpacity>
          <TouchableOpacity disabled={timer > 0} onPress={handleSendOtp}>

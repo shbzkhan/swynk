@@ -4,26 +4,28 @@ import Wrapper from '../components/common/Wrapper';
 import { goBack, navigate } from '../navigation/NavigationUtils';
 import FormField from '../components/FormField';
 import AuthHeader from '../components/auth/AuthHeader';
-import { ToastShow } from '../utils/toast';
+import { ToastLoading, ToastShow } from '../utils/toast';
 import { useOtpSendMutation } from '../redux/api/userApi';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { ErrorShow } from '../utils/error';
 
 
 const EmailAddressScreen = () => {
     const [email, setEmail] = useState('');
-    const [otpSend, {isLoading}] = useOtpSendMutation()
+    const [otpSend, {isLoading}] = useOtpSendMutation();
+
     const handleSendOtp = async() => {
         if(!email.trim().endsWith('@gmail.com')){
-            return ToastShow('Enter valid email address','danger');
+            return ToastShow('Enter valid email address',null, 'danger');
         }
+        const toastId = ToastLoading('Please wait');
             try {
                 const sendOtp = await otpSend(email).unwrap();
                 console.log(sendOtp);
-                ToastShow(sendOtp.message);
+                ToastShow(sendOtp.message,toastId);
                 navigate('OTPScreen',{email});
             } catch (err) {
-                const error = err as FetchBaseQueryError;
-                const errorMsg = error.data as { message: string };
-                ToastShow(errorMsg.message, 'danger');
+                ErrorShow(err, toastId);
             }
     };
   return (
@@ -39,13 +41,14 @@ const EmailAddressScreen = () => {
             placeholder="Enter your email"
             handleChangeText={(e)=>setEmail(e)}
             autoFocus
+            editable={!isLoading}
             returnKeyType="send"
             onSubmitEditing={handleSendOtp}
         />
         </View>
         <KeyboardAvoidingView behavior="padding">
             <View className="px-6 pb-6">
-                <TouchableOpacity onPress={()=>goBack()}>
+                <TouchableOpacity onPress={()=>goBack()} disabled={isLoading}>
                     <Text className="text-base text-center text-primary font-rubik">Cancel</Text>
                 </TouchableOpacity>
             </View>
