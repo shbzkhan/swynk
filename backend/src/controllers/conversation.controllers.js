@@ -10,9 +10,18 @@ const getUserConversation = asyncHandler(async (req, res) => {
   const participantsAggregate = Conversation.aggregate([
     {
       $match: {
-        participants: userId,
+        participants: {$in:[userId]},
       },
     },
+    {
+      $lookup:{
+        from:"messages",
+        localField:"_id",
+        foreignField:"conversation",
+        as:"message"
+      }
+    },
+    
     {
       $unwind: "$participants",
     },
@@ -37,6 +46,18 @@ const getUserConversation = asyncHandler(async (req, res) => {
           },
         ],
       },
+    },
+    {
+      $addFields:{
+        message:{
+          $last:"$message"
+        }
+      }
+    },
+    {
+      $sort:{
+        "message.createdAt":-1
+      }
     },
     {
       $unwind: "$participants",

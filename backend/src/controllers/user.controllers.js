@@ -324,7 +324,6 @@ const logoutUser = asyncHandler(async (req, res) => {
 //refereh access token controller
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingToken = req.cookies?.refreshToken || req.body?.refreshToken;
-  console.log("incoming token hear", incomingToken);
   if (!incomingToken) {
     throw new ApiError(401, "Refresh token not found");
   }

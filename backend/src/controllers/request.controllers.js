@@ -39,11 +39,12 @@ const sendRequest = asyncHandler(async (req, res) => {
   if (!createRequest)
     throw new ApiError(500, "Request send failed, please try again");
    if (receiver.fcmToken) {
+    const safeAvatar = req.user.avatar ? encodeURI(req.user.avatar) : null
       await sendNotificationToDevice({
         token: receiver.fcmToken,
         title: req.user.username,
         body: `${req.user.fullname} send request,`,
-        imageUrl: req.user.avatar,
+        imageUrl: safeAvatar,
       });
     }
   return res
@@ -89,11 +90,12 @@ const acceptOrRejectRequest = asyncHandler(async (req, res) => {
   }
   await Request.findByIdAndDelete(request);
 if (request.sender.fcmToken) {
+  const safeAvatar = req.user.avatar ? encodeURI(req.user.avatar) : null
       await sendNotificationToDevice({
         token: request.sender.fcmToken,
         title: req.user.username,
         body: `${req.user.fullname} accept request,`,
-        imageUrl: req.user.avatar,
+        imageUrl: safeAvatar,
       });
     }
   return res
