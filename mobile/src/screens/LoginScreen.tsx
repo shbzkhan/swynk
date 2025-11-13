@@ -24,9 +24,9 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    // const fcmToken = await AsyncStorage.getItem("fcmToken");
+    const fcmToken = await AsyncStorage.getItem('fcmToken');
     try {
-      const userLoggedIn = await login(form).unwrap();
+      const userLoggedIn = await login({...form, fcmToken}).unwrap();
       ToastShow(userLoggedIn.message, 'success');
       dispatch(userData(userLoggedIn.data.user));
       await AsyncStorage.setItem(
@@ -41,7 +41,7 @@ const LoginScreen = () => {
     } catch (err) {
       const error = err as FetchBaseQueryError;
       const errorMsg = error.data as { message: string };
-      ToastShow(errorMsg.message, 'danger');
+      ToastShow(errorMsg.message,null, 'danger');
     }
   };
   return (

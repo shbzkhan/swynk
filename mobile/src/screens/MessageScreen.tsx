@@ -8,7 +8,7 @@ import MessageCard from '../components/message/MessageCard';
 
 const MessageScreen = () => {
   const route = useRoute();
-  const { name, avatar } = route.params as object | any;
+  const { fullname, avatar } = route.params as object | any;
   const [data, setData] = useState([
     {
       _id:1,
@@ -59,7 +59,7 @@ const MessageScreen = () => {
 
   return (
     <Wrapper>
-        <MessageHeader title={name} avatar={avatar}/>
+        <MessageHeader title={fullname} avatar={avatar}/>
         <FlatList
         data={data}
         inverted

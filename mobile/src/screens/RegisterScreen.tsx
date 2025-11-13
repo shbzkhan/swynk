@@ -48,7 +48,7 @@ const RegisterScreen = () => {
   const [register, { isLoading }] = useRegisterMutation();
 
   const handleRegister = async () => {
-    console.log("otpTokensverification", form.otpToken);
+    console.log('otpTokensverification', form.otpToken);
     const toastId = ToastLoading('Profile creating');
     try {
       const user = await register(form).unwrap();

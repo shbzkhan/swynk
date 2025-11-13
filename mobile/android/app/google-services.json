@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "72471757467",
+    "project_id": "swynk-3bcfe",
+    "storage_bucket": "swynk-3bcfe.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:72471757467:android:7046888629106c19ee7c3e",
+        "android_client_info": {
+          "package_name": "com.swynk"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbgUEC2Jc4a9dgzQtie_HtPTbbbrvErBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

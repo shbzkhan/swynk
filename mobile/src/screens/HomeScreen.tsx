@@ -1,26 +1,34 @@
 import { Search } from 'lucide-react-native';
-import React, { useEffect } from 'react';
-import { FlatList, TextInput, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, TextInput, View } from 'react-native';
 import Wrapper from '../components/common/Wrapper';
 import HomeHeader from '../components/home/HomeHeader';
 import ChatCard from '../components/home/ChatCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
+import { useGetConversationsQuery } from '../redux/api/conversationApi';
 
 
 const HomeScreen = () => {
   const {user} = useSelector((state:RootState)=>state.auth);
+  const [page, setPage] = useState(1);
+  const {data,isLoading} = useGetConversationsQuery({page: 1});
+  console.log("conversations ",data);
+
+  if(isLoading){
+    return <ActivityIndicator/>;
+  }
   return (
     <Wrapper isBottomTabs={true}>
       <HomeHeader
       title="Swynk Chat"
       />
       <FlatList
-      data={[1,2,3,4,5,6,7,8,9,10,11,12,13]}
+      data={data.docs}
       keyExtractor={(index)=>index}
       showsVerticalScrollIndicator={false}
-      renderItem={()=>(
-        <ChatCard/>
+      renderItem={({item})=>(
+        <ChatCard item={item}/>
       )}
       ListHeaderComponent={
         <View className="px-3 my-3">

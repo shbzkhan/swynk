@@ -1,6 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import customBaseQuery from '../middleware/headerRedux';
 import { CurrentUserResponse, LoginUserResponse, RegisterUserResponse, SendOTPResponse, VerifyOTPResponse } from '../../types/user.types';
+import { formProps } from '../../screens/RegisterScreen';
 
 export const userApi = createApi({
   reducerPath: 'user',
@@ -22,7 +23,7 @@ export const userApi = createApi({
       }),
     }),
     //register new user
-    register: builder.mutation<RegisterUserResponse, {fullname:string, username:string, password:string, email:string}>({
+    register: builder.mutation<RegisterUserResponse, formProps>({
       query: newUser => ({
         url: 'register',
         method: 'POST',
