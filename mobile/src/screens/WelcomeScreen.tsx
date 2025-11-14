@@ -1,9 +1,42 @@
 import { View, Text, Image} from 'react-native';
 import Wrapper from '../components/common/Wrapper';
 import CustomButton from '../components/common/CustomButton';
-import { navigate } from '../navigation/NavigationUtils';
+import { navigate, resetAndNavigate } from '../navigation/NavigationUtils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { userData } from '../redux/slice/userSlice';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useDispatch } from 'react-redux';
+import { useGoogleLoginMutation } from '../redux/api/userApi';
+import { ToastShow } from '../utils/toast';
 
 const WelcomeScreen = () => {
+  const dispatch = useDispatch();
+  const [googleLogin,{isLoading}] = useGoogleLoginMutation()
+  const handleGoogle = async () => {
+    const fcmToken = await AsyncStorage.getItem('fcmToken');
+    try {
+      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.signOut();
+      const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo.data?.idToken;
+    if (!idToken) {
+      return;
+    }
+      const userLoggedIn = await googleLogin({idToken, fcmToken}).unwrap();
+      console.log("login data", userLoggedIn.data);
+          ToastShow(userLoggedIn.message);
+          console.log(userLoggedIn);
+          dispatch(userData(userLoggedIn.data.user));
+          await AsyncStorage.setItem("access-token", userLoggedIn?.data?.accessToken);
+          await AsyncStorage.setItem('refresh-token', userLoggedIn?.data?.refreshToken);
+          resetAndNavigate('BottomTabs');
+
+    } catch (e: any) {
+       console.log('Google error full:', e);
+    console.log('Google error data:', e?.data);
+  console.log('Google error status:', e?.status);
+    }
+  };
   return (
     <Wrapper className="justify-center gap-6 px-3">
       <View className="items-center justify-center">
@@ -21,7 +54,8 @@ const WelcomeScreen = () => {
       <View className="gap-6">
         <CustomButton
         title="Login with Google"
-        handlePress={()=>navigate('BottomTabs')}
+        loading={isLoading}
+        handlePress={handleGoogle}
         />
         <CustomButton
         title="Continue with Email"

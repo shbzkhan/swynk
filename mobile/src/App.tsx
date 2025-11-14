@@ -4,18 +4,19 @@ import MainNavigator from './navigation/MainNavigator';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { useEffect } from 'react';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import messaging from '@react-native-firebase/messaging';
 import { requestNotificationPermission } from './utils/notificationService';
-import notifee, { AndroidImportance, AndroidStyle, EventType } from '@notifee/react-native';
+import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
 
 const App = () => {
    useEffect(()=>{
-  //   GoogleSignin.configure({
-  //   webClientId:WEB_CLIENT_ID,
-  //   forceCodeForRefreshToken:true,
-  //   offlineAccess:false,
-  //   iosClientId:IOS_CLIENT_ID
-  // });
+    GoogleSignin.configure({
+    webClientId:WEB_CLIENT_ID,
+    forceCodeForRefreshToken:true,
+    offlineAccess:false,
+    iosClientId:IOS_CLIENT_ID
+  });
 
 
   //notifications
