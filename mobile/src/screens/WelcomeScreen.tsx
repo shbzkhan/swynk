@@ -11,24 +11,25 @@ import { ToastShow } from '../utils/toast';
 
 const WelcomeScreen = () => {
   const dispatch = useDispatch();
-  const [googleLogin,{isLoading}] = useGoogleLoginMutation()
+  const [googleLogin,{isLoading}] = useGoogleLoginMutation();
   const handleGoogle = async () => {
     const fcmToken = await AsyncStorage.getItem('fcmToken');
     try {
       await GoogleSignin.hasPlayServices();
       await GoogleSignin.signOut();
       const userInfo = await GoogleSignin.signIn();
+      console.log('google info', userInfo);
       const idToken = userInfo.data?.idToken;
     if (!idToken) {
       return;
     }
       const userLoggedIn = await googleLogin({idToken, fcmToken}).unwrap();
-      console.log("login data", userLoggedIn.data);
+      console.log('login data', userLoggedIn.data);
           ToastShow(userLoggedIn.message);
           console.log(userLoggedIn);
           dispatch(userData(userLoggedIn.data.user));
-          await AsyncStorage.setItem("access-token", userLoggedIn?.data?.accessToken);
-          await AsyncStorage.setItem('refresh-token', userLoggedIn?.data?.refreshToken);
+          await AsyncStorage.setItem('access-token', userLoggedIn?.data.accessToken,);
+          await AsyncStorage.setItem('refresh-token',userLoggedIn?.data.refreshToken,);
           resetAndNavigate('BottomTabs');
 
     } catch (e: any) {

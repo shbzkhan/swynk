@@ -10,8 +10,9 @@ const ChatCard = ({item}) => {
   return (
     <TouchableOpacity className="flex-row items-center justify-between px-3 py-3 border-b border-light-border dark:border-dark-border"
     onPress={()=>navigate('MessageScreen',{
-      fullname: item.participants.fullname, 
-      avatar: item.participants.avatar
+      conversationId: item._id,
+      fullname: item.participants.fullname,
+      avatar: item.participants.avatar,
     })}
     >
       <View className="flex-row items-center gap-2">
