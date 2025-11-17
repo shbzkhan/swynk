@@ -14,7 +14,7 @@ const MessageCard = ({item, showMeta}) => {
             disabled={!showMeta}
             >
               <Image
-                source={{uri: item.sender.avatar }}
+                source={{uri: item.sender.avatar.url }}
                 className="w-full h-full rounded-full"
                 resizeMode="cover"
               />

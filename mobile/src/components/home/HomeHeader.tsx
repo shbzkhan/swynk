@@ -14,7 +14,7 @@ const HomeHeader:FC<headerProps> = ({title}) => {
   return (
     <View className="flex-row items-center justify-between h-16 px-3 bg-white border-b border-light-border dark:border-dark-border dark:bg-dark-50">
         <UserLogo
-        url={user?.avatar}
+        url={user?.avatar.url}
         handlePress={()=>navigate('ProfileScreen')}
         />
         <Text className="text-lg text-black dark:text-white font-rubik-extrabold">{title}</Text>

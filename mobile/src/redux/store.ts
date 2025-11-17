@@ -4,6 +4,7 @@ import userReducer from './slice/userSlice';
 import { userApi } from './api/userApi';
 import { conversationApi } from './api/conversationApi';
 import { messageApi } from './api/messageApi';
+import { requestApi } from './api/requestApi';
 
 export const store = configureStore({
   reducer: {
@@ -11,12 +12,14 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [conversationApi.reducerPath]: conversationApi.reducer,
     [messageApi.reducerPath]: messageApi.reducer,
+    [requestApi.reducerPath]: requestApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
   .concat(userApi.middleware)
   .concat(conversationApi.middleware)
   .concat(messageApi.middleware)
+  .concat(requestApi.middleware)
 });
 
 setupListeners(store.dispatch);

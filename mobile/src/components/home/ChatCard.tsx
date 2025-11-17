@@ -12,12 +12,12 @@ const ChatCard = ({item}) => {
     onPress={()=>navigate('MessageScreen',{
       conversationId: item._id,
       fullname: item.participants.fullname,
-      avatar: item.participants.avatar,
+      avatar: item.participants.avatar.url,
     })}
     >
       <View className="flex-row items-center gap-2">
         <UserLogo
-        url={item.participants.avatar}
+        url={item.participants.avatar.url}
         />
         <View>
             <Text className="text-lg text-black font-rubik-medium dark:text-white">{item.participants.fullname}</Text>
