@@ -8,10 +8,12 @@ import { sendNotificationToDevice } from "../utils/sendNotificationToDevice.js";
 
 const getConversationMessages = asyncHandler(async (req, res) => {
   const { conversationId } = req.params;
+  const { page = 1, limit = 10 } = req.query;
+  // console.log(conversationId)
   const messageAggregate = Message.aggregate([
     {
       $match: {
-        conversation: conversationId,
+        conversation: new mongoose.Types.ObjectId(conversationId),
       },
     },
     {
@@ -30,6 +32,13 @@ const getConversationMessages = asyncHandler(async (req, res) => {
           },
         ],
       },
+    },
+    {
+      $addFields:{
+        sender:{
+          $first:"$sender"
+        }
+      }
     },
     {
       $sort: {
@@ -98,7 +107,7 @@ const sendMessage = asyncHandler(async (req, res) => {
     const safeAvatar = req.user.avatar ? encodeURI(req.user.avatar) : null
         await sendNotificationToDevice({
           token: receiver.fcmToken,
-          title: req.user.username,
+          title: req.user.fullname,
           body: `New message`,
           imageUrl: safeAvatar,
         });

@@ -7,13 +7,14 @@ import ChatCard from '../components/home/ChatCard';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useGetConversationsQuery } from '../redux/api/conversationApi';
+import CustomSearchInput from '../components/common/CustomSearchInput';
 
 
 const HomeScreen = () => {
   const {user} = useSelector((state:RootState)=>state.auth);
   const [page, setPage] = useState(1);
   const {data,isLoading} = useGetConversationsQuery({page: 1});
-  console.log("conversations ",data);
+  console.log("conversation", data)
 
   if(isLoading){
     return <ActivityIndicator/>;
@@ -24,7 +25,7 @@ const HomeScreen = () => {
       title="Swynk Chat"
       />
       <FlatList
-      data={data.docs}
+      data={data?.docs}
       keyExtractor={(index)=>index}
       showsVerticalScrollIndicator={false}
       renderItem={({item})=>(
@@ -32,14 +33,7 @@ const HomeScreen = () => {
       )}
       ListHeaderComponent={
         <View className="px-3 my-3">
-        <View className="flex-row items-center px-3 border rounded-full border-light-border dark:border-dark-border dark:bg-dark-50">
-          <Search size={20} color="#005FFF"/>
-          <TextInput
-          placeholder="Search"
-          selectionColor="#005FFF"
-          className="w-full py-2 text-black align-middle pr-7 font-rubik dark:text-white placeholder:text-text"
-          />
-        </View>
+        <CustomSearchInput/>
       </View>
       }
       />

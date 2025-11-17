@@ -1,10 +1,13 @@
 import EmailAddressScreen from '../screens/EmailAddressScreen';
 import LoginScreen from '../screens/LoginScreen';
 import MessageScreen from '../screens/MessageScreen';
+import NewGroupScreen from '../screens/NewGroupScreen';
 import OTPScreen from '../screens/OTPScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import RequestScreen from '../screens/RequestScreen';
 import SearchFriendScreen from '../screens/SearchFriendScreen';
+import SearchScreen from '../screens/SearchScreen';
 import SplashScreen from '../screens/SplashScreen';
 import WelcomeScreen from '../screens/WelcomeScreen';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -52,6 +55,18 @@ const dashboardStack = [
     {
         name:'MessageScreen',
         component: MessageScreen,
+    },
+    {
+        name:'SearchScreen',
+        component: SearchScreen,
+    },
+    {
+        name:'RequestScreen',
+        component: RequestScreen,
+    },
+    {
+        name:'NewGroupScreen',
+        component: NewGroupScreen,
     },
 ];
 

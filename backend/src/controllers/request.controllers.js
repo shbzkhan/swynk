@@ -42,7 +42,7 @@ const sendRequest = asyncHandler(async (req, res) => {
     const safeAvatar = req.user.avatar ? encodeURI(req.user.avatar) : null
       await sendNotificationToDevice({
         token: receiver.fcmToken,
-        title: req.user.username,
+        title: req.user.fullname,
         body: `${req.user.fullname} send request,`,
         imageUrl: safeAvatar,
       });
@@ -93,7 +93,7 @@ if (request.sender.fcmToken) {
   const safeAvatar = req.user.avatar ? encodeURI(req.user.avatar) : null
       await sendNotificationToDevice({
         token: request.sender.fcmToken,
-        title: req.user.username,
+        title: req.user.fullname,
         body: `${req.user.fullname} accept request,`,
         imageUrl: safeAvatar,
       });

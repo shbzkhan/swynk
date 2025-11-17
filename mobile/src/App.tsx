@@ -1,21 +1,20 @@
-import '../global.css';
-import React from 'react';
-import MainNavigator from './navigation/MainNavigator';
-import { Provider } from 'react-redux';
-import { store } from './redux/store';
-import { useEffect } from 'react';
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import messaging from '@react-native-firebase/messaging';
-import { requestNotificationPermission } from './utils/notificationService';
 import notifee, { AndroidImportance, EventType } from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import React, { useEffect } from 'react';
+import { Provider } from 'react-redux';
+import '../global.css';
+import MainNavigator from './navigation/MainNavigator';
+import { store } from './redux/store';
+import { requestNotificationPermission } from './utils/notificationService';
 
 const App = () => {
    useEffect(()=>{
     GoogleSignin.configure({
-    webClientId:WEB_CLIENT_ID,
+    webClientId:'169610081696-gnkj974650mj1rso9use8j9l1bh7o9sq.apps.googleusercontent.com',
     forceCodeForRefreshToken:true,
     offlineAccess:false,
-    iosClientId:IOS_CLIENT_ID
+    iosClientId:'169610081696-hlojke1jhs3jdak7ij7ll8ht8uf5770p.apps.googleusercontent.com',
   });
 
 
@@ -34,7 +33,6 @@ const App = () => {
           pressAction:{id:'default'},
           largeIcon: imageUrl,
           circularLargeIcon: true,
-          // style:imageUrl ? {type:AndroidStyle.BIGPICTURE, picture:imageUrl}: undefined
         },
       });
     });

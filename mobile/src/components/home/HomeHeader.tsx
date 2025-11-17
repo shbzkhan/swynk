@@ -18,7 +18,9 @@ const HomeHeader:FC<headerProps> = ({title}) => {
         handlePress={()=>navigate('ProfileScreen')}
         />
         <Text className="text-lg text-black dark:text-white font-rubik-extrabold">{title}</Text>
-        <TouchableOpacity className="items-center justify-center w-10 h-10 rounded-full shadow-2xl bg-light shadow-light-border dark:shadow-dark-border dark:bg-dark-50">
+        <TouchableOpacity className="items-center justify-center w-10 h-10 rounded-full shadow-2xl bg-light shadow-light-border dark:shadow-dark-border dark:bg-dark-50"
+        onPress={()=>navigate('RequestScreen')}
+        >
           <UserRoundSearch size={20} color="#005FFF"/>
         </TouchableOpacity>
       </View>
