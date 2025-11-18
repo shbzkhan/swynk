@@ -7,10 +7,7 @@ export const conversationApi = createApi({
   endpoints: builder => ({
     //conversation get;
 
-   getConversations: builder.query<
-      any,
-      { page?: number;}
-    >({
+   getConversations: builder.query<any,{ page?: number;}>({
       query: ({ page = 1}) =>
         `?page=${page}&limit=10`,
       transformResponse: (response: { data: any }) => response.data,

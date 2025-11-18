@@ -1,20 +1,23 @@
-import { View, Text, FlatList, ActivityIndicator } from 'react-native';
-import React from 'react';
-import Wrapper from '../components/common/Wrapper';
+import React, { useState } from 'react';
+import { ActivityIndicator, FlatList, View } from 'react-native';
 import CustomHeader from '../components/common/CustomHeader';
 import CustomSearchInput from '../components/common/CustomSearchInput';
-import { useGetUserRequestsQuery } from '../redux/api/requestApi';
+import Wrapper from '../components/common/Wrapper';
 import UserRequestCard from '../components/UserRequestCard';
+import { useGetUserRequestsQuery } from '../redux/api/requestApi';
 
 const RequestScreen = () => {
+  const [query, setQuery] = useState('');
   const {data, isLoading} = useGetUserRequestsQuery();
-  console.log("request data",data);
 
   return (
     <Wrapper>
         <CustomHeader title="Add Friends"/>
         <View className="px-3 mt-3">
-            <CustomSearchInput/>
+            <CustomSearchInput
+            value={query}
+            handleChangeText={(e: React.SetStateAction<string>)=>setQuery(e)}
+            />
             {
               !isLoading ? (
                 <FlatList

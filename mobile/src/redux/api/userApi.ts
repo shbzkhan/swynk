@@ -61,6 +61,11 @@ export const userApi = createApi({
         method: 'GET',
       }),
     }),
+    getSearchedUser: builder.query<any,{ page?: number, query:string}>({
+      query: ({ page = 1, query}) =>
+        `search/?page=${page}&limit=10&query=${query}`,
+      transformResponse: (response: { data: any }) => response.data,
+    }),
   }),
 });
 
@@ -72,4 +77,5 @@ export const {
     useGoogleLoginMutation,
     useCurrentUserQuery,
     useRefreshAccessTokenMutation,
+    useLazyGetSearchedUserQuery,
 } = userApi;

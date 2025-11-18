@@ -3,9 +3,10 @@ import React from 'react';
 import UserLogo from './common/UserLogo';
 
 const UserRequestCard = ({item}) => {
-  console.log("request c", item);
   return (
-    <TouchableOpacity className="flex-row items-center justify-between px-3 py-3 border-b border-light-border dark:border-dark-border">
+    <TouchableOpacity className="flex-row items-center justify-between px-3 py-3 border-b border-light-border dark:border-dark-border"
+    disabled
+    >
       <View className="flex-row items-center gap-2">
         <UserLogo
         url = {item.sender.avatar.url}

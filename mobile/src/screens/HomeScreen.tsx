@@ -13,6 +13,7 @@ import CustomSearchInput from '../components/common/CustomSearchInput';
 const HomeScreen = () => {
   const {user} = useSelector((state:RootState)=>state.auth);
   const [page, setPage] = useState(1);
+
   const {data,isLoading} = useGetConversationsQuery({page: 1});
   console.log("conversation", data)
 
