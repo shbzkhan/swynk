@@ -155,8 +155,7 @@ const userRegister = asyncHandler(async (req, res) => {
       username,
       password,
       avatar: {
-        url:
-          avatar.secure_url,
+        url: avatar.secure_url,
       },
       fcmToken: "",
     });
@@ -167,8 +166,7 @@ const userRegister = asyncHandler(async (req, res) => {
       username,
       password,
       avatar: {
-        url:
-          `https://api.dicebear.com/9.x/initials/png?seed=${fullname}`,
+        url: `https://api.dicebear.com/9.x/initials/png?seed=${fullname}`,
       },
       fcmToken: "",
     });
@@ -376,6 +374,139 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, { user: req.user }, { new: true }));
 });
 
+const searchUser = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 10, query } = req.query;
+  const userId = new mongoose.Types.ObjectId(req.user._id);
+
+  const searchedUsersAggregate = User.aggregate([
+    {
+      $search: {
+        index: "search-users",
+        compound: {
+          should: [
+            {
+              autocomplete: {
+                query,
+                path: "username",
+              },
+            },
+            {
+              autocomplete: {
+                query,
+                path: "fullname",
+              },
+            },
+          ],
+        },
+      },
+    },
+    {
+      $match: {
+        _id: { $ne: userId }
+      }
+    },
+    {
+      $lookup: {
+        from: "conversations",
+        let: { searchedUser: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {$in: [userId, "$participants"]},
+                  {$in:["$$searchedUser", "$participants"]},
+                ],
+              },
+            },
+          },
+        ],
+        as:"conversation"
+      },
+    },
+    {
+      $lookup:{
+        from:"requests",
+        let:{searchedUserId:"$_id"},
+        pipeline:[
+          {
+            $match:{
+              $expr:{
+                $and:[
+                  {
+                    $or:[
+                      {
+                        $eq:["$sender",userId]
+                      },{
+                        $eq:["$sender",'$$searchedUserId']
+                      }
+                    ]
+                  },
+                  {
+                    $or:[
+                      {
+                        $eq:["$receiver",userId]
+                      },{
+                        $eq:["$receiver",'$$searchedUserId']
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          {
+            $addFields:{
+              isSender:{
+                $eq:["$sender",userId]
+              },
+            }
+          },{
+            $project:{
+              _id:0,
+              isSender:1
+            }
+          }
+        ],
+        as:"request"
+      }
+    },
+    {
+      $addFields:{
+        conversation:{
+           $cond: [ { $gt: [{ $size: "$conversation" }, 0] }, true, false],
+        },
+        request:{
+          $first:"$request"
+        },
+        hasRequest: {
+          $gt: [{ $size: "$request" }, 0]
+        }
+      }
+    },
+    {
+      $project:{
+        fullname:1,
+        username:1,
+        avatar:1,
+        conversation:1,
+        hasRequest:1,
+        request:1
+      }
+    }
+  ]);
+
+  const options = {
+    page: parseInt(page, 10),
+    limit: parseInt(limit, 10),
+  };
+  const searchedUsers = await User.aggregatePaginate(searchedUsersAggregate, options)
+
+  return res
+      .status(200)
+      .json(new ApiResponse(200, searchedUsers, "users find successfully"));
+});
+
 export {
   sendOtp,
   verifyOtp,
@@ -385,4 +516,5 @@ export {
   logoutUser,
   refreshAccessToken,
   getCurrentUser,
+  searchUser
 };
