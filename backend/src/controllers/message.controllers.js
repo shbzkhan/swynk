@@ -108,7 +108,7 @@ const sendMessage = asyncHandler(async (req, res) => {
         await sendNotificationToDevice({
           token: receiver.fcmToken,
           title: req.user.fullname,
-          body: `New message`,
+          body: "sent you a chat",
           imageUrl: safeAvatar,
         });
       }

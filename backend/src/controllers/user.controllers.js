@@ -414,40 +414,45 @@ const searchUser = asyncHandler(async (req, res) => {
             $match: {
               $expr: {
                 $and: [
-                  {$in: [userId, "$participants"]},
-                  {$in:["$$searchedUser", "$participants"]},
+                  { $in: [userId, "$participants"] },
+                  { $in: ["$$searchedUser", "$participants"] },
                 ],
               },
             },
           },
+          {
+            $project: {
+              _id: 1
+            },
+          }
         ],
-        as:"conversation"
+        as: "conversation"
       },
     },
     {
-      $lookup:{
-        from:"requests",
-        let:{searchedUserId:"$_id"},
-        pipeline:[
+      $lookup: {
+        from: "requests",
+        let: { searchedUserId: "$_id" },
+        pipeline: [
           {
-            $match:{
-              $expr:{
-                $and:[
+            $match: {
+              $expr: {
+                $and: [
                   {
-                    $or:[
+                    $or: [
                       {
-                        $eq:["$sender",userId]
-                      },{
-                        $eq:["$sender",'$$searchedUserId']
+                        $eq: ["$sender", userId]
+                      }, {
+                        $eq: ["$sender", '$$searchedUserId']
                       }
                     ]
                   },
                   {
-                    $or:[
+                    $or: [
                       {
-                        $eq:["$receiver",userId]
-                      },{
-                        $eq:["$receiver",'$$searchedUserId']
+                        $eq: ["$receiver", userId]
+                      }, {
+                        $eq: ["$receiver", '$$searchedUserId']
                       }
                     ]
                   }
@@ -456,28 +461,25 @@ const searchUser = asyncHandler(async (req, res) => {
             }
           },
           {
-            $addFields:{
-              isSender:{
-                $eq:["$sender",userId]
-              },
-            }
-          },{
-            $project:{
-              _id:0,
-              isSender:1
+            $project: {
+              sender: 1,
+              receiver: 1
             }
           }
         ],
-        as:"request"
+        as: "request"
       }
     },
     {
-      $addFields:{
-        conversation:{
-           $cond: [ { $gt: [{ $size: "$conversation" }, 0] }, true, false],
+      $addFields: {
+        conversation: {
+          $first: "$conversation"
         },
-        request:{
-          $first:"$request"
+        hasConversation: {
+          $cond: [{ $gt: [{ $size: "$conversation" }, 0] }, true, false],
+        },
+        request: {
+          $first: "$request"
         },
         hasRequest: {
           $gt: [{ $size: "$request" }, 0]
@@ -485,13 +487,14 @@ const searchUser = asyncHandler(async (req, res) => {
       }
     },
     {
-      $project:{
-        fullname:1,
-        username:1,
-        avatar:1,
-        conversation:1,
-        hasRequest:1,
-        request:1
+      $project: {
+        fullname: 1,
+        username: 1,
+        avatar: 1,
+        conversation: 1,
+        hasConversation: 1,
+        hasRequest: 1,
+        request: 1
       }
     }
   ]);
@@ -503,8 +506,8 @@ const searchUser = asyncHandler(async (req, res) => {
   const searchedUsers = await User.aggregatePaginate(searchedUsersAggregate, options)
 
   return res
-      .status(200)
-      .json(new ApiResponse(200, searchedUsers, "users find successfully"));
+    .status(200)
+    .json(new ApiResponse(200, searchedUsers, "users find successfully"));
 });
 
 export {

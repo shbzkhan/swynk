@@ -43,7 +43,7 @@ const sendRequest = asyncHandler(async (req, res) => {
       await sendNotificationToDevice({
         token: receiver.fcmToken,
         title: req.user.fullname,
-        body: `${req.user.fullname} send request,`,
+        body: "sent request to you",
         imageUrl: safeAvatar,
       });
     }
@@ -94,7 +94,7 @@ if (request.sender.fcmToken) {
       await sendNotificationToDevice({
         token: request.sender.fcmToken,
         title: req.user.fullname,
-        body: `${req.user.fullname} accept request,`,
+        body: "accepted your request",
         imageUrl: safeAvatar,
       });
     }
