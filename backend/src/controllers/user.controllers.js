@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { deleteOnCloudinary, uploadOnCloudinary } from "../utils/cloudinary.js";
@@ -375,11 +375,14 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 });
 
 const searchUser = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 10, query } = req.query;
-  const userId = new mongoose.Types.ObjectId(req.user._id);
+  const { page = 1, limit = 10, query, userId } = req.query;
+  const myId = new mongoose.Types.ObjectId(req.user._id);
 
-  const searchedUsersAggregate = User.aggregate([
-    {
+  const pipeline =[]
+
+  if(query){
+    pipeline.push(
+      {
       $search: {
         index: "search-users",
         compound: {
@@ -402,9 +405,25 @@ const searchUser = asyncHandler(async (req, res) => {
     },
     {
       $match: {
-        _id: { $ne: userId }
+        _id: { $ne: myId }
       }
     },
+    )
+  }
+
+  if(userId){
+    if (!isValidObjectId) {
+      throw new ApiError(401, "Inavlid User Id");
+    }
+
+    pipeline.push({
+      $match: {
+        _id: new mongoose.Types.ObjectId(userId),
+      },
+    });
+  }
+
+  pipeline.push(
     {
       $lookup: {
         from: "conversations",
@@ -414,7 +433,7 @@ const searchUser = asyncHandler(async (req, res) => {
             $match: {
               $expr: {
                 $and: [
-                  { $in: [userId, "$participants"] },
+                  { $in: [myId, "$participants"] },
                   { $in: ["$$searchedUser", "$participants"] },
                 ],
               },
@@ -441,7 +460,7 @@ const searchUser = asyncHandler(async (req, res) => {
                   {
                     $or: [
                       {
-                        $eq: ["$sender", userId]
+                        $eq: ["$sender", myId]
                       }, {
                         $eq: ["$sender", '$$searchedUserId']
                       }
@@ -450,7 +469,7 @@ const searchUser = asyncHandler(async (req, res) => {
                   {
                     $or: [
                       {
-                        $eq: ["$receiver", userId]
+                        $eq: ["$receiver", myId]
                       }, {
                         $eq: ["$receiver", '$$searchedUserId']
                       }
@@ -490,6 +509,7 @@ const searchUser = asyncHandler(async (req, res) => {
       $project: {
         fullname: 1,
         username: 1,
+        email:1,
         avatar: 1,
         conversation: 1,
         hasConversation: 1,
@@ -497,8 +517,9 @@ const searchUser = asyncHandler(async (req, res) => {
         request: 1
       }
     }
-  ]);
+  )
 
+const searchedUsersAggregate = User.aggregate(pipeline)
   const options = {
     page: parseInt(page, 10),
     limit: parseInt(limit, 10),

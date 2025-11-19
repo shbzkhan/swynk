@@ -25,8 +25,17 @@ const sendRequest = asyncHandler(async (req, res) => {
     throw new ApiError(400, "You are already friend");
   }
   const alreadySendRequest = await Request.findOne({
-    sender: req.user._id,
-    receiver: receiverId,
+    $or:[
+      {
+        sender: req.user._id,
+        receiver: receiverId,
+      },
+      {
+      
+        sender: receiverId,
+        receiver: req.user._id,
+      }
+    ]
   });
 
   if (alreadySendRequest) throw new ApiError(400, "Already sended request");
