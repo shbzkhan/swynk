@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import React from 'react';
-import HomeScreen from '../screens/HomeScreen';
-import {MessageCircle, Shell} from 'lucide-react-native';
-import StoryScreen from '../screens/StoryScreen';
+import { MessageCircle, Shell } from 'lucide-react-native';
 import { useColorScheme } from 'nativewind';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import HomeScreen from '../screens/HomeScreen';
+import StoryScreen from '../screens/StoryScreen';
 
 const BottomTabNavigator = () => {
     const Tab = createBottomTabNavigator();
@@ -15,7 +15,7 @@ const BottomTabNavigator = () => {
      <Tab.Navigator
      screenOptions={()=>({
       headerShown:false,
-      tabBarActiveTintColor:'#005FFF',
+      tabBarActiveTintColor: colorScheme === 'dark' ? 'white' : '#005FFF',
       tabBarInactiveTintColor:'#7A7A7A',
 
       tabBarStyle:{

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Wrapper from '../components/common/Wrapper';
-import CustomSearchInput from '../components/common/CustomSearchInput';
-import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
 import { ActivityIndicator, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
+import CustomSearchInput from '../components/common/CustomSearchInput';
+import Wrapper from '../components/common/Wrapper';
 import SearchUserCard from '../components/home/SearchUserCard';
+import { RootState } from '../redux/store';
 import { useLazyGetSearchedUserQuery } from '../redux/api/userApi';
 
 const SearchScreen = () => {
@@ -12,7 +12,7 @@ const SearchScreen = () => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
   const [triggerSearch, { data, isFetching }] = useLazyGetSearchedUserQuery();
-
+console.log("search data",data)
   const handleSearch = () =>{
     triggerSearch({page, query});
   };

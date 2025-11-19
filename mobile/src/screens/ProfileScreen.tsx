@@ -1,9 +1,10 @@
-import { View, Text, Button } from 'react-native';
-import React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
+import { Button, Text } from 'react-native';
+import { useDispatch } from 'react-redux';
+import Wrapper from '../components/common/Wrapper';
 import { resetAndNavigate } from '../navigation/NavigationUtils';
 import { clearUser } from '../redux/slice/userSlice';
-import { useDispatch } from 'react-redux';
 
 const ProfileScreen = () => {
 const dispatch = useDispatch();
@@ -15,10 +16,10 @@ const dispatch = useDispatch();
   };
 
   return (
-    <View>
+    <Wrapper>
       <Text>ProfileScreen</Text>
       <Button title="Logout" onPress = {logout}/>
-    </View>
+    </Wrapper>
   );
 };
 

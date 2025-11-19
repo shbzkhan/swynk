@@ -1,12 +1,11 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Search } from 'lucide-react-native'
-import { TextInput } from 'react-native'
+import React from 'react';
+import { TextInput, View } from 'react-native';
+import CustomIcon from './CustomIcon';
 
 const CustomSearchInput = ({handleChangeText, value, onSubmitEditing}:any) => {
   return (
     <View className="flex-row items-center px-3 border rounded-full border-light-border dark:border-dark-border dark:bg-dark-50">
-              <Search size={20} color="#005FFF"/>
+              <CustomIcon name="Search"/>
               <TextInput
               placeholder="Search"
               value={value}
@@ -17,7 +16,7 @@ const CustomSearchInput = ({handleChangeText, value, onSubmitEditing}:any) => {
               className="w-full py-2 text-black align-middle pr-7 font-rubik dark:text-white placeholder:text-text"
               />
             </View>
-  )
-}
+  );
+};
 
-export default CustomSearchInput
+export default CustomSearchInput;

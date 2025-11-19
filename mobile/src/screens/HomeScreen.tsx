@@ -1,13 +1,12 @@
-import { Search } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, TextInput, View } from 'react-native';
-import Wrapper from '../components/common/Wrapper';
-import HomeHeader from '../components/home/HomeHeader';
-import ChatCard from '../components/home/ChatCard';
+import React, { useState } from 'react';
+import { FlatList, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
-import { useGetConversationsQuery } from '../redux/api/conversationApi';
 import CustomSearchInput from '../components/common/CustomSearchInput';
+import Wrapper from '../components/common/Wrapper';
+import ChatCard from '../components/home/ChatCard';
+import HomeHeader from '../components/home/HomeHeader';
+import { useGetConversationsQuery } from '../redux/api/conversationApi';
+import { RootState } from '../redux/store';
 
 
 const HomeScreen = () => {
@@ -15,19 +14,15 @@ const HomeScreen = () => {
   const [page, setPage] = useState(1);
 
   const {data,isLoading} = useGetConversationsQuery({page: 1});
-  console.log("conversation", data)
 
-  if(isLoading){
-    return <ActivityIndicator/>;
-  }
   return (
-    <Wrapper isBottomTabs={true}>
+    <Wrapper isBottomTabs={true} loading={isLoading}>
       <HomeHeader
       title="Swynk Chat"
       />
       <FlatList
       data={data?.docs}
-      keyExtractor={(index)=>index}
+      keyExtractor={(item)=>item._id}
       showsVerticalScrollIndicator={false}
       renderItem={({item})=>(
         <ChatCard item={item}/>

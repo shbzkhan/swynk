@@ -4,6 +4,7 @@ import customBaseQuery from '../middleware/headerRedux';
 export const conversationApi = createApi({
   reducerPath: 'conversation',
   baseQuery: customBaseQuery('conversations/'),
+  tagTypes:['User','Conversation'],
   endpoints: builder => ({
     //conversation get;
 
@@ -11,6 +12,7 @@ export const conversationApi = createApi({
       query: ({ page = 1}) =>
         `?page=${page}&limit=10`,
       transformResponse: (response: { data: any }) => response.data,
+      providesTags:['User','Conversation'],
     }),
   }),
 });

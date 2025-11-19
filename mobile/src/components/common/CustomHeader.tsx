@@ -1,9 +1,8 @@
-import { View, Text } from 'react-native';
-import React from 'react';
-import { TouchableOpacity } from 'react-native';
-import { goBack, navigate } from '../../navigation/NavigationUtils';
 import { ChevronLeft } from 'lucide-react-native';
+import React from 'react';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Ellipse } from 'react-native-svg';
+import { goBack, navigate } from '../../navigation/NavigationUtils';
 
 const CustomHeader = ({title} :{ title: string}) => {
   return (
@@ -13,7 +12,7 @@ const CustomHeader = ({title} :{ title: string}) => {
         >
           <ChevronLeft size={35} color="#005FFF"/>
         </TouchableOpacity>
-        <Text className="text-lg text-black dark:text-white font-rubik-extrabold">{title}</Text>
+        <Text className="text-lg text-black dark:text-white font-rubik-medium">{title}</Text>
         <TouchableOpacity className="items-center justify-center w-10 h-10 rounded-full shadow-2xl bg-light shadow-light-border dark:shadow-dark-border dark:bg-dark-50"
         onPress={()=>navigate('RequestScreen')}
         >

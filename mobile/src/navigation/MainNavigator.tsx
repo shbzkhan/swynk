@@ -27,7 +27,7 @@ if(currentDataLoading){
     <NavigationContainer
     ref={navigationRef}
     >
-    <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} backgroundColor={colorScheme === 'dark' ? '#101418' : '#FFFFFF'} />
+    <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
       <ToastProvider>
         <StackNavigator/>
         </ToastProvider>
