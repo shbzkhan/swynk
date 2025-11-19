@@ -104,7 +104,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   if (receiver.fcmToken) {
     console.log(receiver.fcmToken)
     console.log(req.user.avatar)
-    const safeAvatar = req.user.avatar ? encodeURI(req.user.avatar) : null
+    const safeAvatar = req.user.avatar.url ? encodeURI(req.user.avatar.url) : null
         await sendNotificationToDevice({
           token: receiver.fcmToken,
           title: req.user.fullname,
