@@ -11,10 +11,11 @@ const BottomTabNavigator = () => {
     const { colorScheme} = useColorScheme();
 
   return (
-    <SafeAreaView className="flex-1 bg-white dark:bg-dark" edges={['bottom']}>
+    <SafeAreaView className="flex-1 bg-header-background" edges={['bottom']}>
      <Tab.Navigator
      screenOptions={()=>({
       headerShown:false,
+      swipeEnabled:true,
       tabBarActiveTintColor: colorScheme === 'dark' ? 'white' : '#005FFF',
       tabBarInactiveTintColor:'#7A7A7A',
 

@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { timeFormat } from '../../constants/timeFormat';
 
 const MessageCard = ({item, showMeta}) => {
   const {user} = useSelector((state:RootState)=>state.auth);
@@ -22,11 +23,11 @@ const MessageCard = ({item, showMeta}) => {
           )
         }
     <View className={` ${item.sender._id === user?._id ? 'items-end' : 'items-start'} gap-1`} >
-        <TouchableOpacity className={`px-4 py-2 border rounded-t-2xl border-light-border dark:border-dark-border ${item.sender._id === user?._id ? `${showMeta ? 'rounded-bl-2xl' : 'rounded-b-2xl'} bg-light-border dark:bg-dark-border` : `${showMeta ? 'rounded-br-2xl' : 'rounded-b-2xl'}  bg-white dark:bg-dark-secondary`}`}>
-      <Text className="dark:text-white font-rubik">{item.content}</Text>
+        <TouchableOpacity className={`px-4 py-2 border rounded-t-2xl border-border ${item.sender._id === user?._id ? `${showMeta ? 'rounded-bl-2xl' : 'rounded-b-2xl'} bg-border` : `${showMeta ? 'rounded-br-2xl' : 'rounded-b-2xl'}  bg-header-background`}`}>
+      <Text className="text-text-primary font-rubik">{item.content}</Text>
         </TouchableOpacity>
         {
-          showMeta && <Text className="text-xs font-rubik text-text">{item.createdAt}</Text>
+          showMeta && <Text className="text-xs capitalize font-rubik text-text">{timeFormat(item.createdAt)}</Text>
         }
       </View>
     </View>

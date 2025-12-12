@@ -4,7 +4,7 @@ import CustomIcon from './CustomIcon';
 
 const CustomSearchInput = ({handleChangeText, value, onSubmitEditing}:any) => {
   return (
-    <View className="flex-row items-center px-3 border rounded-full border-light-border dark:border-dark-border dark:bg-dark-50">
+    <View className="flex-row items-center px-3 border rounded-full border-border bg-header-background">
               <CustomIcon name="Search"/>
               <TextInput
               placeholder="Search"
@@ -13,7 +13,7 @@ const CustomSearchInput = ({handleChangeText, value, onSubmitEditing}:any) => {
               onChangeText={handleChangeText}
               returnKeyType="search"
               onSubmitEditing={onSubmitEditing}
-              className="w-full py-2 text-black align-middle pr-7 font-rubik dark:text-white placeholder:text-text"
+              className="w-full py-2 align-middle text-text-primary pr-7 font-rubik placeholder:text-text"
               />
             </View>
   );

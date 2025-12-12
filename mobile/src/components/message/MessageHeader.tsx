@@ -10,15 +10,16 @@ interface headerProps {
 }
 const MessageHeader:FC<headerProps> = ({title,avatar}) => {
   return (
-    <View className="flex-row items-center justify-between h-16 px-3 bg-white border-b border-light-border dark:border-dark-border dark:bg-dark-50">
+    <View className="flex-row items-center justify-between h-16 px-3 border-b bg-header-background border-border">
         <TouchableOpacity className="items-center justify-center w-10 h-10 "
         onPress={()=>goBack()}
         >
           <ChevronLeft size={30} color="#005FFF"/>
         </TouchableOpacity>
         <View className="items-center justify-center">
-        <Text className="text-lg text-black dark:text-white font-rubik-extrabold">{title}</Text>
-        <Text className="text-xs text-text dark:text-white font-rubik">Online</Text>
+        <Text className="text-lg text-text-primary font-rubik-medium">{title}</Text>
+        <Text className="text-xs text-text font-rubik">Active now</Text>
+        {/* <Text className="text-xs text-primary font-rubik">Active in chat</Text> */}
         </View>
         <UserLogo
         url={avatar}

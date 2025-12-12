@@ -48,7 +48,7 @@ const WelcomeScreen = () => {
       />
       <View className="items-center justify-center">
       <Text className="text-sm font-rubik text-text">Welcome to</Text>
-      <Text className="text-2xl font-rubik-bold dark:text-white">Swynk Chat App</Text>
+      <Text className="text-2xl font-rubik-bold text-text-primary">Swynk Chat App</Text>
       </View>
       </View>
       <Text className="text-center font-rubik-medium text-text">Please Login in Swynk app</Text>

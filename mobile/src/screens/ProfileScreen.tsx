@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { Button, Text } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Wrapper from '../components/common/Wrapper';
 import { resetAndNavigate } from '../navigation/NavigationUtils';
 import { clearUser } from '../redux/slice/userSlice';
+import { RootState } from '../redux/store';
 
 const ProfileScreen = () => {
 const dispatch = useDispatch();
@@ -14,10 +15,10 @@ const dispatch = useDispatch();
     dispatch(clearUser());
     resetAndNavigate('WelcomeScreen');
   };
-
+const {user} = useSelector((state:RootState)=>state.auth);
   return (
     <Wrapper>
-      <Text>ProfileScreen</Text>
+      <Text>{user.email}</Text>
       <Button title="Logout" onPress = {logout}/>
     </Wrapper>
   );

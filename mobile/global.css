@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --backgroud:#FCFCFC;
+    --backgroud-header:#FFFFFF;
+    --secondary:#F2F2F2;
+    --border:#ECEBEB;
+    --text-primary:#000000;
+}
+
+@media (prefers-color-scheme: dark){
+    :root {
+        --backgroud:#070A0D;
+        --backgroud-header:#101418;
+        --secondary:#13151B;
+        --border:#1C1E22;
+        --text-primary:#FFFFFF;
+    }
+}

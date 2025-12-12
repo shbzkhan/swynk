@@ -15,6 +15,11 @@ module.exports = {
       },
       colors:{
         primary:  "#005FFF",
+        background:'var(--backgroud)',
+        'header-background':'var(--backgroud-header)',
+        secondary:'var(--secondary)',
+        border:'var(--border)',
+        'text-primary':'var(--text-primary)',
         light:{
           DEFAULT:"#FCFCFC",
           "secondary":"#F2F2F2",

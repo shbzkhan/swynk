@@ -64,7 +64,7 @@ const OTPScreen = () => {
             // eslint-disable-next-line react-native/no-inline-styles
             style={{ letterSpacing: 4}}
             onChangeText={(e)=>setOtp(e)}
-            className="mx-6 text-5xl font-bold text-center align-text-top border-b dark:text-white border-light-secondary dark:border-dark-secondary"
+            className="mx-6 text-5xl font-bold text-center align-text-top border-b text-text-primary border-secondary"
             keyboardType="number-pad"
             maxLength={6}
             autoFocus

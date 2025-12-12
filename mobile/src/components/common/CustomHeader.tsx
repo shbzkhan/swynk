@@ -6,14 +6,14 @@ import { goBack, navigate } from '../../navigation/NavigationUtils';
 
 const CustomHeader = ({title} :{ title: string}) => {
   return (
-    <View className="flex-row items-center justify-between h-16 px-3 bg-white border-b border-light-border dark:border-dark-border dark:bg-dark-50">
-        <TouchableOpacity className="items-center justify-center w-10 h-10 rounded-full shadow-2xl bg-light shadow-light-border dark:shadow-dark-border dark:bg-dark-50"
+    <View className="flex-row items-center justify-between h-16 px-3 border-b border-border bg-header-background">
+        <TouchableOpacity className="items-center justify-center"
         onPress={()=>goBack()}
         >
           <ChevronLeft size={35} color="#005FFF"/>
         </TouchableOpacity>
-        <Text className="text-lg text-black dark:text-white font-rubik-medium">{title}</Text>
-        <TouchableOpacity className="items-center justify-center w-10 h-10 rounded-full shadow-2xl bg-light shadow-light-border dark:shadow-dark-border dark:bg-dark-50"
+        <Text className="text-lg text-text-primary font-rubik-medium">{title}</Text>
+        <TouchableOpacity className="items-center justify-center"
         onPress={()=>navigate('RequestScreen')}
         >
           <Ellipse size={20} color="#005FFF"/>

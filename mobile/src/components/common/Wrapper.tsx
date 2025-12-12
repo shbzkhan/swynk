@@ -11,10 +11,10 @@ interface WrapperProps{
 const Wrapper:FC<WrapperProps> = ({loading = false, children, className, isBottomTabs = false}) => {
   return (
     <SafeAreaView
-    className="flex-1 bg-white dark:bg-dark-50"
+    className="flex-1 bg-header-background"
     edges={isBottomTabs ? ['left','right','top'] : ['bottom','left','right','top']}
   >
-    <View className={`flex-1 bg-light dark:bg-dark ${className}`}>
+    <View className={`flex-1 bg-background ${className}`}>
       {loading ? (
         <View className="items-center justify-center flex-1">
           <ActivityIndicator size={'large'} color={'#005FFF'}/>

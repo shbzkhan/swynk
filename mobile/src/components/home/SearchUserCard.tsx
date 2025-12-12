@@ -11,7 +11,7 @@ const SearchUserCard = ({item}:any) => {
     const {handleAcceptRequest, acceptRequestLoading} = useAcceptRequest();
     const {handleSendRequest, sendRequestLoading} = useSendRequest();
   return (
-    <TouchableOpacity className="flex-row items-center justify-between px-3 py-3 border-b border-light-border dark:border-dark-border"
+    <TouchableOpacity className="flex-row items-center justify-between px-3 py-3 border-b border-border"
     disabled
     >
       <View className="flex-row items-center gap-2">
@@ -19,7 +19,7 @@ const SearchUserCard = ({item}:any) => {
         url = {item.avatar.url}
         />
         <View>
-            <Text className="text-lg text-black font-rubik-medium dark:text-white">{item.fullname}</Text>
+            <Text className="text-lg text-text-primary font-rubik-medium">{item.fullname}</Text>
             <Text className="text-xs font-rubik text-text">{item.username}</Text>
         </View>
       </View>

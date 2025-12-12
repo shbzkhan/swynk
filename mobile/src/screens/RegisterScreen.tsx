@@ -75,7 +75,7 @@ const RegisterScreen = () => {
       <View className="items-center justify-center">
         <TouchableOpacity
         onPress={HandleImagePicker}
-         className="items-center justify-center overflow-hidden rounded-full w-36 h-36 bg-light-secondary dark:bg-dark-secondary">
+         className="items-center justify-center overflow-hidden rounded-full w-36 h-36 bg-secondary">
         {
           image ? (
             <Image

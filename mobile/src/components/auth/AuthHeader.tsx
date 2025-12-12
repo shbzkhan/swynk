@@ -10,7 +10,7 @@ interface authHeader {
 const AuthHeader:FC<authHeader> = ({headerText, secondaryText, buttonText, handlePress}) => {
   return (
     <View className="mb-10">
-        <Text className="px-2 mb-2 text-3xl text-black dark:text-white font-rubik-extrabold">{headerText}</Text>
+        <Text className="px-2 mb-2 text-3xl text-text-primary font-rubik-extrabold">{headerText}</Text>
         <Text className="px-2 text-base text-text font-rubik-bold">{secondaryText}</Text>
         {
         buttonText && (
