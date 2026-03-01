@@ -3,9 +3,11 @@ import { UserData } from '../../types/user.types';
 
 interface UserState {
   user: UserData | null;
+  onlineUsers:string[] | null
 }
 const initialState: UserState = {
   user: null,
+  onlineUsers: null,
 };
 
 const userSlice = createSlice({
@@ -19,8 +21,12 @@ const userSlice = createSlice({
     clearUser: state => {
       state.user = null;
     },
+
+    setOnlineUsers :(state, action: PayloadAction<string[]>) =>{
+      state.onlineUsers = action.payload;
+    },
   },
 });
 
-export const { userData, clearUser } = userSlice.actions;
+export const { userData, clearUser, setOnlineUsers } = userSlice.actions;
 export default userSlice.reducer;

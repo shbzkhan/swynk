@@ -8,6 +8,7 @@ const ChatCard = ({item}) => {
     <TouchableOpacity className="flex-row items-center justify-between px-3 py-3 border-b border-border"
     onPress={()=>navigate('MessageScreen',{
       conversationId: item._id,
+      _id: item.participants._id,
       fullname: item.participants.fullname,
       avatar: item.participants.avatar.url,
     })}

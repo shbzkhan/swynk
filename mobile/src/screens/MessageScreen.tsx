@@ -10,14 +10,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MessageScreen = () => {
   const route = useRoute();
-  const { conversationId, fullname, avatar } = route.params as object | any;
+  const { conversationId, _id, fullname, avatar } = route.params as object | any;
   const {data, isLoading} = useGetMesssagesQuery({conversationId});
 if(isLoading){
   return <ActivityIndicator/>;
 }
   return (
     <SafeAreaView className="flex-1 bg-header-background">
-        <MessageHeader title={fullname} avatar={avatar}/>
+        <MessageHeader title={fullname} avatar={avatar} _id={_id} />
         <FlatList
         data={data.docs}
         inverted
