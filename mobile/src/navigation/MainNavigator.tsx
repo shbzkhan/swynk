@@ -28,7 +28,7 @@ const MainNavigator = () => {
 
   useEffect(() => {
     if(authUser){
-      const socket = io('http://10.178.60.250:4000',{
+      const socket = io('http://172.27.178.250:4000',{
             query:{
               userId: authUser._id,
             },
