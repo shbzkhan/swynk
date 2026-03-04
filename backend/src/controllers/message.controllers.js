@@ -5,6 +5,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { sendNotificationToDevice } from "../utils/sendNotificationToDevice.js";
+import { io, getReceiverSocketId } from "../socket/socket.js";
 
 const getConversationMessages = asyncHandler(async (req, res) => {
   const { conversationId } = req.params;
@@ -34,9 +35,9 @@ const getConversationMessages = asyncHandler(async (req, res) => {
       },
     },
     {
-      $addFields:{
-        sender:{
-          $first:"$sender"
+      $addFields: {
+        sender: {
+          $first: "$sender"
         }
       }
     },
@@ -72,7 +73,6 @@ const getConversationMessages = asyncHandler(async (req, res) => {
 const sendMessage = asyncHandler(async (req, res) => {
   const { conversationId } = req.params;
   const { content } = req.body;
-
   const conversation = await Conversation.findById(conversationId)
     .populate("participants", "fullname username fcmToken")
     .lean();
@@ -90,28 +90,36 @@ const sendMessage = asyncHandler(async (req, res) => {
   if (!receiver) {
     throw new ApiError(400, "Friend not found in this conversation");
   }
-  console.log(receiver);
-  const message = await Message.create({
+  const newMessage = await Message.create({
     content,
     conversation: conversationId,
     sender: req.user._id,
     read: false,
   });
-
+  const message = await newMessage.populate(
+      "sender",
+      "fullname username avatar"
+    );
   if (!message) {
     throw new ApiError(404, "Message not send");
   }
+  //socket 
+  const receiverSocketId = getReceiverSocketId(receiver._id)
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("newMessage", message)
+    console.log("MESSAGE SEND")
+  }
+
   if (receiver.fcmToken) {
-    console.log(receiver.fcmToken)
-    console.log(req.user.avatar)
     const safeAvatar = req.user.avatar.url ? encodeURI(req.user.avatar.url) : null
-        await sendNotificationToDevice({
-          token: receiver.fcmToken,
-          title: req.user.fullname,
-          body: "sent you a chat",
-          imageUrl: safeAvatar,
-        });
-      }
+    await sendNotificationToDevice({
+      token: receiver.fcmToken,
+      title: req.user.fullname,
+      body: "sent you a chat",
+      imageUrl: safeAvatar,
+    });
+  }
   return res
     .status(200)
     .json(new ApiResponse(200, message, "message send successfully"));
