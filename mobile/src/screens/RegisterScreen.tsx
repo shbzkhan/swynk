@@ -93,6 +93,7 @@ const RegisterScreen = () => {
         <FormField
         title="Full Name"
         value={form.fullname}
+        isEditable={!isLoading}
         placeholder="Enter your Full Name"
         handleChangeText={(e)=>setForm({...form, fullname:e})}
         />
@@ -100,12 +101,14 @@ const RegisterScreen = () => {
         title="Username"
         value={form.username}
         placeholder="Enter your username"
+        isEditable={!isLoading}
         handleChangeText={(e)=>setForm({...form, username:e})}
         />
         <FormField
         title="Password"
         value={form.password}
         placeholder="Enter your password"
+        isEditable={!isLoading}
         handleChangeText={(e)=>setForm({...form, password:e})}
         />
       </View>

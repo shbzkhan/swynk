@@ -5,9 +5,10 @@ interface formFiledProps {
     title:string
     value:string
     placeholder:string
+    isEditable:boolean
     handleChangeText:(e:string)=>void
 }
-const FormField:FC<formFiledProps> = ({title, value, placeholder, handleChangeText,...props}) => {
+const FormField:FC<formFiledProps> = ({title, value, placeholder, handleChangeText,isEditable,...props}) => {
   return (
    <View className="px-4 py-3 rounded-2xl bg-secondary">
         <Text className="font-rubik-semibold text-text">{title}</Text>
@@ -18,6 +19,8 @@ const FormField:FC<formFiledProps> = ({title, value, placeholder, handleChangeTe
             onChangeText={handleChangeText}
             secureTextEntry={title === 'Password'}
             selectionColor="#005FFF"
+            editable={isEditable}
+            autoCapitalize="none"
             {...props}
         />
    </View>

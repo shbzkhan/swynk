@@ -1,12 +1,12 @@
 import { useColorScheme } from 'nativewind';
 import {ActivityIndicator, Text, TouchableOpacity} from 'react-native';
 
-const CustomButton = ({title, handlePress, loading}:{title:string, handlePress:()=>void,loading?:boolean}) => {
+const CustomButton = ({title, handlePress, loading, isDisabled}:{title:string, handlePress:()=>void,loading?:boolean, isDisabled?: boolean}) => {
     const {colorScheme} = useColorScheme();
   return (
     <TouchableOpacity className="items-center w-full py-4 rounded-full bg-primary dark:bg-white" activeOpacity={0.5}
     onPress={handlePress}
-    disabled={loading}
+    disabled={loading || isDisabled}
     >
         {
             loading ? (

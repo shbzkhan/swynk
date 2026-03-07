@@ -41,7 +41,7 @@ const EmailAddressScreen = () => {
             placeholder="Enter your email"
             handleChangeText={(e)=>setEmail(e)}
             autoFocus
-            editable={!isLoading}
+            isEditable={!isLoading}
             returnKeyType="send"
             onSubmitEditing={handleSendOtp}
         />

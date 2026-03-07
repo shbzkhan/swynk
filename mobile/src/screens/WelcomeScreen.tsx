@@ -59,6 +59,7 @@ const WelcomeScreen = () => {
         handlePress={handleGoogle}
         />
         <CustomButton
+        isDisabled={isLoading}
         title="Continue with Email"
         handlePress={()=>navigate('LoginScreen')}
         />

@@ -25,7 +25,11 @@ const LoginScreen = () => {
 
   const handleLogin = async () => {
     const fcmToken = await AsyncStorage.getItem('fcmToken');
+    if(form.email.trim() === '' || form.password.trim() === '') return
     try {
+      if(!form.email.trim().endsWith('@gmail.com')){
+        return ToastShow('Enter valid email address',null, 'danger');
+      }
       const userLoggedIn = await login({...form, fcmToken}).unwrap();
       ToastShow(userLoggedIn.message, 'success');
       dispatch(userData(userLoggedIn.data.user));
@@ -65,6 +69,7 @@ const LoginScreen = () => {
         title="Email"
         value={form.email}
         placeholder="Enter your email"
+        isEditable={!isLoading}
         handleChangeText={(e)=>setForm({...form, email:e})}
         />
         <View>
@@ -72,12 +77,13 @@ const LoginScreen = () => {
         title="Password"
         value={form.password}
         placeholder="Enter your password"
+        isEditable={!isLoading}
         handleChangeText={(e)=>setForm({...form, password:e})}
         />
         <TouchableOpacity
         onPress={()=>navigate('EmailAddressScreen')}
         >
-          <Text className="px-2 mt-1 text-sm text-right text-primary font-rubik">Forget password ?</Text>
+          <Text className="px-2 mt-1 text-sm text-right text-primary font-rubik" disabled={isLoading}>Forget password ?</Text>
         </TouchableOpacity>
         </View>
       </View>
@@ -91,7 +97,7 @@ const LoginScreen = () => {
       <Pressable className="flex-row items-center justify-center gap-1" onPress={() => navigate('EmailAddressScreen')}>
         <Text className="font-rubik text-text">Create a new account?</Text>
                           <TouchableOpacity onPress={() => navigate('EmailAddressScreen')}>
-                            <Text className="text-primary font-rubik-bold">
+                            <Text className="text-primary font-rubik-bold" disabled={isLoading}>
                               Register
                             </Text>
                              </TouchableOpacity>
