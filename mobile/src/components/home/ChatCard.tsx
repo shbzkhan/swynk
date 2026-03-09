@@ -18,7 +18,7 @@ const ChatCard = ({item}) => {
         url={item.participants.avatar.url}
         />
         <View>
-            <Text className="text-lg text-text-primary font-rubik-medium">{item.participants.fullname}</Text>
+            <Text className="text-lg text-text-0178 font-rubik-medium">{item.participants.fullname}</Text>
             <Text className="text-xs font-rubik text-text">{item.participants.username}</Text>
         </View>
       </View>

@@ -8,13 +8,14 @@ type iconsName = keyof typeof icons
 type IconTypes = {
     name:iconsName,
     size?:number,
+    customColor?:string
 }
-const CustomIcon:FC<IconTypes> = ({ name, size = 20 }) => {
+const CustomIcon:FC<IconTypes> = ({ name, size = 20, customColor = '' }) => {
     const {colorScheme} = useColorScheme();
   const LucideIcon  = icons[name];
 
   return <LucideIcon
-            color={colorScheme === 'dark' ? 'white' : '#005FFF'}
+            color={customColor === '' ? colorScheme === 'dark' ? 'white' : '#005FFF' : customColor}
             size={size}
         />;
 };

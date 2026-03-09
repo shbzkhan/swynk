@@ -6,7 +6,7 @@ import { useSendMessageMutation } from '../../redux/api/messageApi';
 import { ToastShow } from '../../utils/toast';
 import { ErrorShow } from '../../utils/error';
 
-const MessageInput = ({conversationId, setAllMessage}:{conversationId:string, setAllMessage:[]}) => {
+const MessageInput = ({conversationId, setAllMessage, setShowContextMenu}:{conversationId:string, setAllMessage:()=>void}) => {
   const [content, setContent] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [sendMessage, {isLoading}] = useSendMessageMutation();

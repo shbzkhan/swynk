@@ -1,15 +1,14 @@
 import { useRoute } from '@react-navigation/native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList } from 'react-native';
-import Wrapper from '../components/common/Wrapper';
-import MessageCard from '../components/message/MessageCard';
-import MessageHeader from '../components/message/MessageHeader';
-import MessageInput from '../components/message/MessageInput';
-import { useGetMesssagesQuery } from '../redux/api/messageApi';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
-import { RootState } from '../redux/store';
+import MessageCard from '../components/message/MessageCard';
+import MessageContextMenu from '../components/message/MessageContextMenu';
+import MessageHeader from '../components/message/MessageHeader';
+import MessageInput from '../components/message/MessageInput';
 import { usePaginatedAllMessage } from '../hooks/usePaginatedAllMessage';
+import { RootState } from '../redux/store';
 
 const MessageScreen = () => {
   const route = useRoute();
@@ -17,7 +16,7 @@ const MessageScreen = () => {
   // const {data, isLoading} = useGetMesssagesQuery({conversationId});
   const {allMessage, setAllMessage, isLoading} = usePaginatedAllMessage({conversationId})
   const {socket} = useSelector((state:RootState)=>state.socket);
-console.log(allMessage)
+  const [showContextMenu, setShowContextMenu] = useState(false)
  useEffect(() => {
   if (!socket) return;
   socket.on("newMessage", (msg) => {
@@ -32,6 +31,7 @@ if(isLoading){
 }
 // console.log("allMessage",data);
   return (
+    <>
     <SafeAreaView className="flex-1 bg-header-background">
         <MessageHeader title={fullname} avatar={avatar} _id={_id} />
         <FlatList
@@ -45,7 +45,7 @@ if(isLoading){
           const preMsg = allMessage[index - 1];
           const showMeta = !preMsg || preMsg.sender._id !== item.sender._id;
           return (
-          <MessageCard item={item} showMeta={showMeta}/>
+          <MessageCard item={item} showMeta={showMeta} setShowContextMenu = {setShowContextMenu}/>
         );
       }}
         />
@@ -54,6 +54,10 @@ if(isLoading){
         setAllMessage = {setAllMessage}
         />
     </SafeAreaView>
+        {
+          showContextMenu && <MessageContextMenu setShowContextMenu = {setShowContextMenu}/>
+        }
+    </>
   );
 };
 

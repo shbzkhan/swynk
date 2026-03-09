@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { timeFormat } from '../../constants/timeFormat';
 
-const MessageCard = ({item, showMeta}) => {
+const MessageCard = ({item, showMeta, setShowContextMenu}) => {
   const {user} = useSelector((state:RootState)=>state.auth);
   return (
     <View className={`flex ${item.sender._id === user?._id ? 'items-end' : 'items-start'} ${showMeta ? 'mb-6' : 'mb-1'}`}>
@@ -23,7 +23,7 @@ const MessageCard = ({item, showMeta}) => {
           )
         }
     <View className={` ${item.sender._id === user?._id ? 'items-end' : 'items-start'} gap-1`} >
-        <TouchableOpacity className={`px-4 py-2 border rounded-t-2xl border-border ${item.sender._id === user?._id ? `${showMeta ? 'rounded-bl-2xl' : 'rounded-b-2xl'} bg-border` : `${showMeta ? 'rounded-br-2xl' : 'rounded-b-2xl'}  bg-header-background`}`}>
+        <TouchableOpacity onLongPress={()=>setShowContextMenu(true)} className={`px-4 py-2 border rounded-t-2xl border-border ${item.sender._id === user?._id ? `${showMeta ? 'rounded-bl-2xl' : 'rounded-b-2xl'} bg-border` : `${showMeta ? 'rounded-br-2xl' : 'rounded-b-2xl'}  bg-header-background`}`}>
       <Text className="text-text-primary font-rubik">{item.content}</Text>
         </TouchableOpacity>
         {
