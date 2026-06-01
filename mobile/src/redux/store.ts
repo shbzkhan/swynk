@@ -6,11 +6,13 @@ import { conversationApi } from './api/conversationApi';
 import { messageApi } from './api/messageApi';
 import { requestApi } from './api/requestApi';
 import socketReducer from './slice/socketSlice';
+import messageReducer from './slice/messageSlice';
 
 export const store = configureStore({
   reducer: {
     auth: userReducer,
     socket: socketReducer,
+    messages: messageReducer,
     [userApi.reducerPath]: userApi.reducer,
     [conversationApi.reducerPath]: conversationApi.reducer,
     [messageApi.reducerPath]: messageApi.reducer,

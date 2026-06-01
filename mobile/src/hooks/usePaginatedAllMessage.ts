@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
 import { useGetMesssagesQuery } from "../redux/api/messageApi";
+import { RootState } from "../redux/store";
+import { useDispatch, useSelector } from "react-redux";
+import { setMessage } from "../redux/slice/messageSlice";
 
 interface UsePaginatedMessagesProps {
   conversationId?: string;
   initialPage?: number;
 }
 export const usePaginatedAllMessage = ({conversationId, initialPage = 1}:UsePaginatedMessagesProps) =>{
+  const dispatch = useDispatch();
     const [page, setPage] = useState(initialPage);
-    const [allMessage, setAllMessage] = useState([]);
     const {data, isLoading, isFetching} = useGetMesssagesQuery({conversationId});
 
 useEffect(() => {
     if (page === 1) {
-      setAllMessage(data?.docs);
+      dispatch(setMessage(data?.docs));
     } else {
       const combinedMessage =
         page === 1 ? data?.docs : [...allMessage, ...data?.docs];
@@ -21,13 +24,13 @@ useEffect(() => {
           combinedMessage?.map(message => [message._id, message]),
         ).values(),
       );
-      setAllMessage(uniqueMessage);
+      dispatch(setMessage(uniqueMessage));
     }
   }, [data, page]);
 
-  useEffect(()=>{
+  // useEffect(()=>{
 
-  },[]);
+  // },[]);
 
   const handleLoadMore = () => {
     if (!isFetching && data?.hasNextPage) {
@@ -36,8 +39,7 @@ useEffect(() => {
   };
 
   return {
-    allMessage,
-    setAllMessage,
+
     isLoading,
     isFetching,
     page,

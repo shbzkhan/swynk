@@ -5,8 +5,11 @@ import UserLogo from '../common/UserLogo';
 import { useSendMessageMutation } from '../../redux/api/messageApi';
 import { ToastShow } from '../../utils/toast';
 import { ErrorShow } from '../../utils/error';
+import { setMessage } from '../../redux/slice/messageSlice';
+import { useDispatch } from 'react-redux';
 
-const MessageInput = ({conversationId, setAllMessage, setShowContextMenu}:{conversationId:string, setAllMessage:()=>void}) => {
+const MessageInput = ({conversationId, setShowContextMenu}:{conversationId:string, setAllMessage:()=>void}) => {
+    const dispatch = useDispatch();
   const [content, setContent] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [sendMessage, {isLoading}] = useSendMessageMutation();
@@ -17,7 +20,7 @@ const MessageInput = ({conversationId, setAllMessage, setShowContextMenu}:{conve
                 try {
                     setContent('');
                     const sendedMessage = await sendMessage({content, conversationId}).unwrap();
-                    setAllMessage((prev) =>[sendedMessage.data, ...prev]);
+                    dispatch(setMessage((prev) =>[sendedMessage.data, ...prev]))
                 } catch (err) {
                     ErrorShow(err);
                 }
