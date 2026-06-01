@@ -16,7 +16,13 @@ const MessageScreen = () => {
   // const {data, isLoading} = useGetMesssagesQuery({conversationId});
   const {allMessage, setAllMessage, isLoading} = usePaginatedAllMessage({conversationId})
   const {socket} = useSelector((state:RootState)=>state.socket);
-  const [showContextMenu, setShowContextMenu] = useState(false)
+  const [showContextMenu, setShowContextMenu] = useState({
+    show: false,
+    selectedMessage: '',
+    selectedMessageId: '',
+    selectedMessageSenderId:'',
+  });
+
  useEffect(() => {
   if (!socket) return;
   socket.on("newMessage", (msg) => {
@@ -55,7 +61,7 @@ if(isLoading){
         />
     </SafeAreaView>
         {
-          showContextMenu && <MessageContextMenu setShowContextMenu = {setShowContextMenu}/>
+          showContextMenu.show && <MessageContextMenu showContextMenu ={showContextMenu} setShowContextMenu = {setShowContextMenu}/>
         }
     </>
   );
