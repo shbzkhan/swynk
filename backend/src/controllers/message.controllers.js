@@ -108,7 +108,6 @@ const sendMessage = asyncHandler(async (req, res) => {
 
   if (receiverSocketId) {
     io.to(receiverSocketId).emit("newMessage", message)
-    console.log("MESSAGE SEND")
   }
 
   if (receiver.fcmToken) {
@@ -125,4 +124,47 @@ const sendMessage = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, message, "message send successfully"));
 });
 
-export { getConversationMessages, sendMessage };
+const deleteMessage = asyncHandler(async (req, res) =>{
+  const {messageId, conversationId} = req.params;
+  if(!messageId){
+    throw new ApiError(404, "Message Id not found");
+  }
+  const message = await Message.findById(messageId)
+
+  if(!message){
+    throw new ApiError(404, "Message not found");
+  }
+
+  if(message.sender.toString() !== req.user._id.toString()){
+    throw new ApiError(401, "Only sender can delete message")
+  }
+
+  const deletedMessage = await message.deleteOne();
+  if(deletedMessage.deletedCount === 0){
+    throw new ApiError(400, "Message not deleted")
+  }
+
+  //socket
+  const conversation = await Conversation.findById(conversationId)
+    .populate("participants", "fullname")
+    .lean();
+  
+  const receiver = conversation.participants.find(
+    (u) => u._id.toString() !== req.user._id.toString()
+  );
+
+  if (!receiver) {
+    throw new ApiError(400, "Friend not found in this conversation");
+  }
+
+  const receiverSocketId = getReceiverSocketId(receiver._id)
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("deletedMessage", messageId)
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200,{messageId}, "message deleted successfully"));
+})
+
+export { getConversationMessages, sendMessage, deleteMessage };
