@@ -9,7 +9,7 @@ import MessageHeader from '../components/message/MessageHeader';
 import MessageInput from '../components/message/MessageInput';
 import { usePaginatedAllMessage } from '../hooks/usePaginatedAllMessage';
 import { RootState } from '../redux/store';
-import { setMessage } from '../redux/slice/messageSlice';
+import { addMessage, setMessage } from '../redux/slice/messageSlice';
 
 const MessageScreen = () => {
   const route = useRoute();
@@ -27,11 +27,11 @@ const MessageScreen = () => {
   });
  useEffect(() => {
   if (!socket) return;
-  socket.on("newMessage", (msg) => {
+  socket.on('newMessage', (msg) => {
     if (!msg?._id) return;
-    dispatch(setMessage((prev) =>[msg, ...prev]));
+    dispatch(addMessage(msg));
   });
-  return () => socket.off("newMessage");
+  return () => socket.off('newMessage');
 }, [socket]);
 
 if(isLoading){

@@ -5,7 +5,7 @@ import UserLogo from '../common/UserLogo';
 import { useSendMessageMutation } from '../../redux/api/messageApi';
 import { ToastShow } from '../../utils/toast';
 import { ErrorShow } from '../../utils/error';
-import { setMessage } from '../../redux/slice/messageSlice';
+import { addMessage, setMessage } from '../../redux/slice/messageSlice';
 import { useDispatch } from 'react-redux';
 
 const MessageInput = ({conversationId, setShowContextMenu}:{conversationId:string, setAllMessage:()=>void}) => {
@@ -20,7 +20,7 @@ const MessageInput = ({conversationId, setShowContextMenu}:{conversationId:strin
                 try {
                     setContent('');
                     const sendedMessage = await sendMessage({content, conversationId}).unwrap();
-                    dispatch(setMessage((prev) =>[sendedMessage.data, ...prev]))
+                    dispatch(addMessage(sendedMessage.data));
                 } catch (err) {
                     ErrorShow(err);
                 }
