@@ -9,7 +9,7 @@ import MessageHeader from '../components/message/MessageHeader';
 import MessageInput from '../components/message/MessageInput';
 import { usePaginatedAllMessage } from '../hooks/usePaginatedAllMessage';
 import { RootState } from '../redux/store';
-import { addMessage, setMessage } from '../redux/slice/messageSlice';
+import { addMessage, deletedMessage, setMessage } from '../redux/slice/messageSlice';
 
 const MessageScreen = () => {
   const route = useRoute();
@@ -27,11 +27,21 @@ const MessageScreen = () => {
   });
  useEffect(() => {
   if (!socket) return;
+
+  // New Message
   socket.on('newMessage', (msg) => {
     if (!msg?._id) return;
     dispatch(addMessage(msg));
   });
-  return () => socket.off('newMessage');
+  // Delete message
+  socket.on('deletedMessage', (messageId) => {
+    if (!messageId) return;
+    dispatch(deletedMessage(messageId));
+  });
+  return () => {
+    socket.off('newMessage');
+    socket.off('deletedMessage');
+  };
 }, [socket]);
 
 if(isLoading){
@@ -62,7 +72,7 @@ if(isLoading){
         />
     </SafeAreaView>
         {
-          showContextMenu.show && <MessageContextMenu showContextMenu ={showContextMenu} setShowContextMenu = {setShowContextMenu}/>
+          showContextMenu.show && <MessageContextMenu showContextMenu ={showContextMenu} setShowContextMenu = {setShowContextMenu} conversationId = {conversationId}/>
         }
     </>
   );

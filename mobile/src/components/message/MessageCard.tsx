@@ -23,7 +23,7 @@ const MessageCard = ({item, showMeta, setShowContextMenu}) => {
           )
         }
     <View className={` ${item.sender._id === user?._id ? 'items-end' : 'items-start'} gap-1`} >
-        <TouchableOpacity onLongPress={()=>setShowContextMenu({show:true, selectedMessage:item.content, selectedMessageId:item.id, selectedMessageSenderId:item.sender._id})} className={`px-4 py-2 border rounded-t-2xl border-border ${item.sender._id === user?._id ? `${showMeta ? 'rounded-bl-2xl' : 'rounded-b-2xl'} bg-border` : `${showMeta ? 'rounded-br-2xl' : 'rounded-b-2xl'}  bg-header-background`}`}>
+        <TouchableOpacity onLongPress={()=>setShowContextMenu({show:true, selectedMessage:item.content, selectedMessageId:item._id, selectedMessageSenderId:item.sender._id})} className={`px-4 py-2 border rounded-t-2xl border-border ${item.sender._id === user?._id ? `${showMeta ? 'rounded-bl-2xl' : 'rounded-b-2xl'} bg-border` : `${showMeta ? 'rounded-br-2xl' : 'rounded-b-2xl'}  bg-header-background`}`}>
       <Text className="text-text-primary font-rubik">{item.content}</Text>
         </TouchableOpacity>
         {

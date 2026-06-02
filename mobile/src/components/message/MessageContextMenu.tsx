@@ -4,13 +4,29 @@ import CustomIcon from '../common/CustomIcon';
 import { BlurView } from '@react-native-community/blur';
 import { useColorScheme } from 'nativewind';
 import { messageContextMenuData } from '../../utils/messageContextMenu';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
+import { useDeleteMessageMutation } from '../../redux/api/messageApi';
+import { deletedMessage } from '../../redux/slice/messageSlice';
 
 
-const MessageContextMenu = ({setShowContextMenu,showContextMenu}) => {
+const MessageContextMenu = ({conversationId, setShowContextMenu, showContextMenu}) => {
     const {colorScheme} = useColorScheme();
+    const dispatch = useDispatch();
     const {user} = useSelector((state:RootState)=>state.auth);
+    const [deleteMessage, {isLoading}] = useDeleteMessageMutation();
+      const handleDeleteMessasgeRequest = async() => {
+                    try {
+                      setShowContextMenu({show:false});
+                      console.log("message deleting")
+                        const deleteddMessage = await deleteMessage({messageId:showContextMenu.selectedMessageId, conversationId}).unwrap();
+                        console.log("message Deleted Successfully",deleteddMessage);
+                        dispatch(deletedMessage(deleteddMessage.data.messageId));
+                    } catch (err) {
+                      console.log("DELETE ERROR:", err);
+                        ErrorShow(err);
+                    }
+            };
   return (
     <Pressable onPress={()=>setShowContextMenu({show:false, selectedMessage:'',selectedMessageId:'', selectedMessageSenderId:''})} className="absolute top-0 left-0 right-0 items-end justify-center w-full h-full gap-3 p-3" >
       <BlurView
@@ -35,8 +51,8 @@ const MessageContextMenu = ({setShowContextMenu,showContextMenu}) => {
         ))
       }
       {
-        showContextMenu.selectedMessageSenderId === user?._id &&(
-      <Pressable className="flex-row items-center gap-5 px-4 py-3 border-b border-secondary">
+        showContextMenu.selectedMessageSenderId === user?._id && (
+      <Pressable className="flex-row items-center gap-5 px-4 py-3 border-b border-secondary" onPress={handleDeleteMessasgeRequest}>
         <CustomIcon name="Trash2" size={21} customColor="#FF3742"/>
         <Text className="text-base font-rubik-medium text-danger">Delete Message</Text>
       </Pressable>  
