@@ -543,8 +543,6 @@ Account Creation
 | `FIREBASE_CLIENT_EMAIL` | Firebase service account email |
 | `FIREBASE_PRIVATE_KEY` | Firebase service account private key |
 
-### Example
-
 ```env
 PORT=8000
 
@@ -579,8 +577,6 @@ FIREBASE_PRIVATE_KEY=your_private_key
 | `API_BASE_URL` | Base URL used by the mobile app to communicate with the backend |
 | `GOOGLE_WEB_CLIENT_ID` | Google OAuth client ID used for Google Sign-In |
 | `SOCKET_URL` | Backend URL used to establish the Socket.IO connection |
-
-### Example
 
 ```env
 API_BASE_URL=http://localhost:8000/api/v1
