@@ -30,7 +30,7 @@ The application is divided into two parts:
 - MongoDB database
 - Modular backend structure
 
-# Application Architecture
+## Application Architecture
 
 ```text
                        Swynk
@@ -50,7 +50,7 @@ The application is divided into two parts:
                            MongoDB
 ```
 
-# Backend
+## Backend
 
 ## Backend Stack
 
@@ -70,8 +70,6 @@ The application is divided into two parts:
 | Google Auth Library | Google Authentication |
 | CORS | Cross-Origin Requests |
 | Cookie Parser | Cookie Handling |
-
-## Backend Capabilities
 
 ### Authentication
 
@@ -142,7 +140,7 @@ The application is divided into two parts:
 - Cloudinary integration
 - Multer file upload middleware
 
-# Backend Folder Structure
+## Backend Folder Structure
 
 ```text
 backend/
@@ -205,7 +203,7 @@ backend/
 └── yarn.lock
 ```
 
-# Database
+## Database
 
 ## Data Models
 
@@ -219,17 +217,17 @@ backend/
 | `Request` | Stores friend requests |
 | `Story` | Stores story information |
 
-# Base API
+### Base API
 
 All REST API endpoints use the following base URL:
 
-## Local Development
+### Local Development
 
 ```text
 http://localhost:8000/api/v1
 ```
 
-## Production
+### Production
 
 ```text
 https://your-backend-domain.com/api/v1
@@ -245,9 +243,9 @@ https://your-backend-domain.com/api/v1
 | Messages | `/messages` | Send, fetch and delete messages |
 | Stories | `/stories` | Create and retrieve stories |
 
-# REST API Reference
+## REST API Reference
 
-## User APIs
+### User APIs
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -261,7 +259,7 @@ https://your-backend-domain.com/api/v1
 | `GET` | `/users/current` | Fetch authenticated user |
 | `GET` | `/users/search` | Search for users |
 
-## Friend Request APIs
+### Friend Request APIs
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -269,14 +267,14 @@ https://your-backend-domain.com/api/v1
 | `POST` | `/requests/send/:receiverId` | Send a friend request |
 | `POST` | `/requests/accept/:requestId` | Accept or reject a request |
 
-## Conversation APIs
+### Conversation APIs
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/conversations/` | Retrieve conversations |
 | `POST` | `/conversations/delete/:conversationId` | Delete a conversation |
 
-## Message APIs
+### Message APIs
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -284,20 +282,20 @@ https://your-backend-domain.com/api/v1
 | `POST` | `/messages/:conversationId` | Send a message |
 | `DELETE` | `/messages/:conversationId/:messageId` | Delete a message |
 
-## Story APIs
+### Story APIs
 
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/stories/` | Create a story |
 | `POST` | `/stories/me` | Retrieve user's stories |
 
-## API Request Example
+### API Request Example
 
 ```http
 GET http://localhost:8000/api/v1/users/current
 ```
 
-# Real-Time Communication
+## Real-Time Communication
 
 Swynk uses Socket.IO for real-time communication between connected users.
 
@@ -324,9 +322,9 @@ Socket implementation:
 backend/src/socket/socket.js
 ```
 
-# Mobile Application
+## Mobile Application
 
-## Mobile Stack
+### Mobile Stack
 
 | Technology | Purpose |
 |---|---|
@@ -348,9 +346,9 @@ backend/src/socket/socket.js
 | Lottie | UI Animations |
 | React Native SVG | SVG Rendering |
 
-# Mobile Features
+## Mobile Features
 
-## Authentication
+### Authentication
 
 - Welcome screen
 - Registration
@@ -361,7 +359,7 @@ backend/src/socket/socket.js
 - Persistent login
 - Logout
 
-## Chat
+### Chat
 
 - One-to-one conversations
 - Real-time messages
@@ -370,7 +368,7 @@ backend/src/socket/socket.js
 - Conversation deletion
 - Socket.IO connection
 
-## Friends
+### Friends
 
 - User discovery
 - Search users
@@ -378,28 +376,28 @@ backend/src/socket/socket.js
 - Accept requests
 - Reject requests
 
-## Stories
+### Stories
 
 - Create stories
 - Upload story media
 - View stories
 - Story viewer
 
-## Profile
+### Profile
 
 - User profile
 - Profile picture
 - Account information
 - Profile management
 
-## Notifications
+### Notifications
 
 - Firebase notifications
 - Device notifications
 - Local notifications
 - Notifee integration
 
-# Mobile Structure
+## Mobile Structure
 
 ```text
 mobile/
@@ -434,7 +432,7 @@ mobile/
 └── yarn.lock
 ```
 
-# Navigation
+### Navigation
 
 Swynk uses React Navigation for managing application navigation.
 
@@ -448,7 +446,7 @@ navigation/
 └── StackNavigator.tsx
 ```
 
-# Main Screens
+### Main Screens
 
 ```text
 screens/
@@ -469,7 +467,7 @@ screens/
 └── WelcomeScreen.tsx
 ```
 
-# Media Management
+### Media Management
 
 Swynk uses Cloudinary for cloud-based media storage.
 
@@ -494,7 +492,7 @@ Media URL
 MongoDB
 ```
 
-# Email and OTP
+### Email and OTP
 
 Nodemailer is used to send verification OTPs through Gmail SMTP.
 
@@ -520,9 +518,9 @@ Verify OTP
 Account Creation
 ```
 
-# Environment Variables
+## Environment Variables
 
-## Backend `.env`
+### Backend `.env`
 
 | Variable | Purpose |
 |---|---|
@@ -570,7 +568,7 @@ FIREBASE_CLIENT_EMAIL=your_service_account_email
 FIREBASE_PRIVATE_KEY=your_private_key
 ```
 
-## Mobile `.env`
+### Mobile `.env`
 
 | Variable | Purpose |
 |---|---|
@@ -586,9 +584,9 @@ GOOGLE_WEB_CLIENT_ID=your_google_web_client_id
 SOCKET_URL=http://localhost:8000
 ```
 
-# Getting Started
+## Getting Started
 
-## Requirements
+### Requirements
 
 - Node.js 18+
 - Yarn or npm
@@ -600,7 +598,7 @@ SOCKET_URL=http://localhost:8000
 - Cloudinary account
 - Gmail account with App Password
 
-## Clone
+### Clone
 
 ```bash
 git clone https://github.com/shbzkhan/swynk.git
@@ -608,7 +606,7 @@ git clone https://github.com/shbzkhan/swynk.git
 cd swynk
 ```
 
-# Backend Setup
+### Backend Setup
 
 ```bash
 cd backend
@@ -618,7 +616,7 @@ yarn install
 yarn dev
 ```
 
-# Mobile Setup
+### Mobile Setup
 
 Open another terminal:
 
@@ -628,25 +626,25 @@ cd mobile
 yarn install
 ```
 
-## Start Metro
+### Start Metro
 
 ```bash
 yarn start
 ```
 
-## Android
+### Android
 
 ```bash
 yarn android
 ```
 
-## iOS
+### iOS
 
 ```bash
 yarn ios
 ```
 
-# Development Workflow
+## Development Workflow
 
 ```text
         React Native App
@@ -670,7 +668,7 @@ yarn ios
                                         Media             Notifications
 ```
 
-# Future Improvements
+## Future Improvements
 
 - Group conversations
 - Message reactions
@@ -688,7 +686,7 @@ yarn ios
 - Improved notification center
 - End-to-end encryption
 
-# Contributing
+## Contributing
 
 Contributions are welcome.
 
@@ -702,7 +700,7 @@ To contribute:
 6. Push your changes.
 7. Create a Pull Request.
 
-# License
+## License
 
 This project is licensed under the ISC License.
 
