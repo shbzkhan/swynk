@@ -223,10 +223,6 @@ backend/
 
 All REST API endpoints use the following base URL:
 
-```text
-/api/v1
-```
-
 ## Local Development
 
 ```text
