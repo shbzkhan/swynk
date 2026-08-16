@@ -705,5 +705,7 @@ To contribute:
 This project is licensed under the ISC License.
 
 ### Portfolio
-
 https://shahbazkhan.vercel.app
+
+### Linkedin 
+https://www.linkedin.com/in/shahbaz-husain
