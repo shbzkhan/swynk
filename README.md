@@ -704,7 +704,8 @@ To contribute:
 
 This project is licensed under the ISC License.
 
-### Author
+### Developed by
+Shahbaz Husain Khan
 
 Portfolio
 https://shahbazkhan.vercel.app
