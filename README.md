@@ -708,7 +708,7 @@ This project is licensed under the ISC License.
 Shahbaz Husain Khan
 
 Portfolio
-https://shahbazkhan.vercel.app
+https://shahbazkhan.vercel.app/
 
 Linkedin 
 https://www.linkedin.com/in/shahbaz-husain
