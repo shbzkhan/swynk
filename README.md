@@ -700,9 +700,6 @@ To contribute:
 6. Push your changes.
 7. Create a Pull Request.
 
-## License
-
-This project is licensed under the ISC License.
 
 ### Developed by
 Shahbaz Husain Khan
