@@ -686,21 +686,6 @@ yarn ios
 - Improved notification center
 - End-to-end encryption
 
-## Contributing
-
-Contributions are welcome.
-
-To contribute:
-
-1. Fork the repository.
-2. Create a new branch.
-3. Implement your changes.
-4. Test the application.
-5. Commit your changes.
-6. Push your changes.
-7. Create a Pull Request.
-
-
 ### Developed by
 Shahbaz Husain Khan
 
